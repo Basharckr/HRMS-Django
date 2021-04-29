@@ -1,0 +1,2 @@
+date	size'/'remotesize	flags(request:Update,Range state:File response:Modified,Chunked,gZipped)	statuscode	status ('servermsg')	MIME	Etag|Date	URL	localfile	(from URL)
+17:36:26	166031/166031	U--M-Z	200	updated ('OK')	text/css	etag:%222888f-5ba573c692c80-gzip%22	https://smarthr.dreamguystech.com/light/assets/css/style.css	smarthr.dreamguystech.com/light/assets/css/style.css	(from )
