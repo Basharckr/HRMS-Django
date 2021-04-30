@@ -1,14 +1,20 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
 from django.contrib.auth.views import LoginView, redirect_to_login
 
 from django.urls import reverse_lazy
 
+from .forms import SignUpFrom
 # Create your views here.
 
 
-# login
+#user signUp
+class SignUpView(CreateView):
+    form_class = SignUpFrom
+    success_url = reverse_lazy('login')
+    template_name = 'account/register.html'
 
+# user login
 class CustomLoginView(LoginView):
     template_name = 'account/login.html'
     fields = '__all__'

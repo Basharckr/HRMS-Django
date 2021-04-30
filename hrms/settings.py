@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'hr',
     'projectlead',
     'employee',
+    'widget_tweaks',
+
     'social_django',
     'django.contrib.sites',
     'allauth',
@@ -120,12 +122,16 @@ WSGI_APPLICATION = 'hrms.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'hr_db',
+        'USER': 'basharckr',
+        'PASSWORD' : '123',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
-
+AUTH_USER_MODEL = 'employee.User'
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 

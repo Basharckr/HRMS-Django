@@ -1,8 +1,10 @@
+{% load widget_tweaks %}
 {% load socialaccount %}
+
 <!DOCTYPE html>
 <html lang="en">
     
-<!-- Mirrored from smarthr.dreamguystech.com/light/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 28 Apr 2021 04:01:27 GMT -->
+<!-- Mirrored from smarthr.dreamguystech.com/light/register.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 28 Apr 2021 04:02:54 GMT -->
 <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
@@ -10,7 +12,7 @@
 		<meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern, accounts, invoice, html5, responsive, CRM, Projects">
         <meta name="author" content="Dreamguys - Bootstrap Admin Template">
         <meta name="robots" content="noindex, nofollow">
-        <title>Login-HRMS</title>
+        <title>Register-HRMS </title>
 		
 		<!-- Favicon -->
         <link rel="shortcut icon" type="image/x-icon" href="https://smarthr.dreamguystech.com/light/assets/img/favicon.png">
@@ -28,7 +30,15 @@
 		<!--[if lt IE 9]>
 			<script src="assets/js/html5shiv.min.js"></script>
 			<script src="assets/js/respond.min.js"></script>
+			
 		<![endif]-->
+		<style>
+			.error{
+				color: red;
+				font-size: small;
+				font-weight: bold;
+			}
+		</style>
     </head>
     <body class="account-page">
 	
@@ -46,45 +56,48 @@
 					
 					<div class="account-box">
 						<div class="account-wrapper">
-							<h3 class="account-title">Login</h3>
+							<h3 class="account-title">Register</h3>
 							<p class="account-subtitle">Access to our dashboard</p>
 							
 							<!-- Account Form -->
 							<form method="POST">{% csrf_token %}
-								<div class="form-group">
-									<label>Username</label>
-									<input class="form-control" name="username" type="text">
-								</div>
-								<div class="form-group">
-									<div class="row">
-										<div class="col">
-											<label>Password</label>
-										</div>
-										<div class="col-auto">
-											<a class="text-muted" href="https://smarthr.dreamguystech.com/light/forgot-password.html">
-												Forgot password?
-											</a>
-										</div>
-									</div>
-									<input class="form-control" name="password" type="password">
-								</div>
+							
+								{{form.username.label_tag}}
+								{{form.username|add_class:"form-control mb-1"}}
+								<p class="error">{{form.username.errors.as_text}}</p>
+
+								{{form.email.label_tag}}
+								{{form.email|add_class:"form-control mb-1"}}
+								<p class="error">{{form.email.errors.as_text}}</p>
+
+								{{form.number.label_tag}}
+								{{form.number|add_class:"form-control mb-1"}}
+								<p class="error">{{form.number.errors.as_text}}</p>
+
+								{{form.password1.label_tag}}
+								{{form.password1|add_class:"form-control mb-1"}}
+								<p class="error">{{form.password1.errors.as_text}}</p>
+
+								{{form.password2.label_tag}}
+								{{form.password2|add_class:"form-control mb-1"}}
+								<p class="error">{{form.password2.errors.as_text}}</p>
+
 								<div class="form-group text-center">
-									<button class="btn btn-primary account-btn" type="submit">Login</button>
+									<button class="btn btn-primary account-btn" type="submit">Register</button>
 								</div>
 								<div class="account-footer">
 									<p>OR</p>
 
 									<a href="{% provider_login_url 'google' %}"class="btn btn  btn-lg btn-block" style="color: white; background-color: red; 
-									font-size: 22px;" >SignIn with Google</a>
+									font-size: 22px;" >SignUp with Google</a>
 									<a href="{% url 'social:begin' 'facebook' %}"class="btn btn btn-info btn-lg btn-block" style="color: white;background-color: blue;
-									font-size: 22px;">SignIn with Facebook</a>
+									font-size: 22px;">SignUp with Facebook</a>
 								</div>
 								<div class="account-footer">
-									<p>Don't have an account yet? <a href="{% url 'signup' %}">Register</a></p>
+									<p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
 								</div>
 							</form>
 							<!-- /Account Form -->
-							
 						</div>
 					</div>
 				</div>
@@ -104,5 +117,5 @@
 		
     </body>
 
-<!-- Mirrored from smarthr.dreamguystech.com/light/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 28 Apr 2021 04:01:27 GMT -->
+<!-- Mirrored from smarthr.dreamguystech.com/light/register.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 28 Apr 2021 04:02:54 GMT -->
 </html>
