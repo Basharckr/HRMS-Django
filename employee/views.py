@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, CreateView
-from django.contrib.auth.views import LoginView, redirect_to_login
+from django.contrib.auth.views import LoginView, redirect_to_login, LogoutView
 
 from django.urls import reverse_lazy
 
@@ -13,6 +13,7 @@ class SignUpView(CreateView):
     form_class = SignUpFrom
     success_url = reverse_lazy('login')
     template_name = 'account/register.html'
+
 
 # user login
 class CustomLoginView(LoginView):
@@ -28,6 +29,10 @@ class CustomLoginView(LoginView):
         elif self.request.user.is_active == True:
             return reverse_lazy('emp_dashboard')
 
+
+#user logout
+class CustomLogoutView(LogoutView):
+    next_page = 'login'
 
 class EmployeeDashboard(TemplateView):
     template_name = 'employee/emp_dashboard.html'
