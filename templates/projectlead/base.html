@@ -306,7 +306,7 @@
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="https://smarthr.dreamguystech.com/light/profile.html">My Profile</a>
 							<a class="dropdown-item" href="https://smarthr.dreamguystech.com/light/settings.html">Settings</a>
-							<a class="dropdown-item" href="https://smarthr.dreamguystech.com/light/login.html">Logout</a>
+							<a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
 						</div>
 					</li>
 				</ul>
@@ -385,7 +385,7 @@
 							<li class="submenu">
 								<a href="#"><i class="la la-rocket"></i> <span> Projects</span> <span class="menu-arrow"></span></a>
 								<ul style="display: none;">
-									<li><a href="https://smarthr.dreamguystech.com/light/projects.html">Projects</a></li>
+									<li><a href="{% url 'list_projects' %}">Projects</a></li>
 									<li><a href="https://smarthr.dreamguystech.com/light/tasks.html">Tasks</a></li>
 									<li><a href="https://smarthr.dreamguystech.com/light/task-board.html">Task Board</a></li>
 								</ul>

@@ -19,8 +19,8 @@ from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('hr', include('hr.urls')),
-    path('projectlead', include('projectlead.urls')),
+    path('hr/', include('hr.urls')),
+    path('projectlead/', include('projectlead.urls')),
     path('', include('employee.urls')),
     path('accounts/', include('allauth.urls')),
     url('', include('social_django.urls', namespace='social'))
