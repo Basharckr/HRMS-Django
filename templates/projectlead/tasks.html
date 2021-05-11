@@ -54,10 +54,10 @@
 																<span class="action-circle large" title="Assign">
 																	<i class="material-icons">person_add</i>
 																</span>
-																<span class="action-circle large delete-btn"
+																<a href="{% url 'tasks-delete' pk=task.id %}" class="action-circle large delete-btn"
 																	title="Delete Task">
 																	<i class="material-icons">delete</i>
-																</span>
+															</a>
 															</span>
 														</div>
 													</li>

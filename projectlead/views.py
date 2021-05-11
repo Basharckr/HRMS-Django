@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, DeleteView
 from django.urls import reverse_lazy
 from hr.models import *
 from .models import *
@@ -33,3 +33,7 @@ class TaskCreate(CreateView):
         context['tasks'] = Tasks.objects.all()
         return context
 
+
+class TaskDelete(DeleteView):
+    model = Tasks
+    uccess_url = reverse_lazy('tasks')
