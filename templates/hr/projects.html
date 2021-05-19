@@ -2,7 +2,11 @@
 {% block title %} HR-project {% endblock %}
 {% block content %}
 
-
+<style>
+	.cal-icon:after {
+		display: none;
+	}
+</style>
 <!-- Page Content -->
 <div class="content container-fluid">
 
@@ -72,15 +76,15 @@
 						<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
 								class="material-icons">more</i></a>
 						<div class="dropdown-menu dropdown-menu-right">
-							<a href="{% url 'update-projects' pk=project.id %}" class="dropdown-item"
-								data-toggle="modal" data-target="#edit_project"><i class="fa fa-pencil m-r-5"></i>
-								Edit</a>
-							<a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_project-{{project.id}}"><i
+							<a href="{% url 'view-project' pk=project.id %}" class="dropdown-item"
+								><i class="fa fa-pencil m-r-5"></i>
+								View & Edit</a>
+							<a class="dropdown-item" href="{% url 'delete-projects' pk=project.id %}" data-toggle="modal" data-target="#delete_project-{{project.id}}"><i
 									class="fa fa-trash-o m-r-5"></i> Delete</a>
 						</div>
 					</div>
 					<h4 class="project-title"><a
-							href="https://smarthr.dreamguystech.com/light/project-view.html">{{project.project_name}}
+							href="{% url 'view-project' pk=project.id %}">{{project.project_name}}
 						</a></h4>
 					<!-- <small class="block text-ellipsis m-b-15">
 						<span class="text-xs">1</span> <span class="text-muted">open tasks, </span>
@@ -356,7 +360,7 @@
 						<div class="modal-btn delete-action">
 							<div class="row">
 								<div class="col-6">
-									<a href="{% url 'update-projects' pk=project.id %}" class="btn btn-primary continue-btn">Delete</a>
+									<a href="{% url 'delete-projects' pk=project.id %}" class="btn btn-primary continue-btn">Delete</a>
 								</div>
 								<div class="col-6">
 									<a href="javascript:void(0);" data-dismiss="modal"
@@ -416,7 +420,7 @@
 							<div class="form-group">
 								<label>End Date</label>
 								<div class="cal-icon">
-									<input class="form-control datetimepicker" name="end_date" type="date">
+									<input class="form-control datetimepicker" name="end_date"  type="date">
 								</div>
 							</div>
 						</div>
@@ -452,8 +456,12 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label>Add Project Leader</label>
-								<input class="form-control" name="project_leader" value="{{request.user.id}}"
-									type="text">
+								
+									<select class="form-control" name="project_leader" id="exampleFormControlSelect2">
+										{% for leader in leaders %}
+										<option value="{{leader.id}}">{{leader.username}}</option>
+										{% endfor %}
+									  </select>
 							</div>
 						</div>
 						<!-- <div class="col-sm-6">

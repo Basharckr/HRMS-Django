@@ -1,3 +1,4 @@
+{% load static %}  
 <!DOCTYPE html>
 <html lang="en">
     
@@ -28,7 +29,11 @@
 		
 		<!-- Main CSS -->
         <link rel="stylesheet" href="https://smarthr.dreamguystech.com/light/assets/css/style.css">
+
+		<!-- Material icons -->
 		
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
 			<script src="assets/js/html5shiv.min.js"></script>
@@ -627,6 +632,9 @@
 		
 		<!-- Custom JS -->
 		<script src="https://smarthr.dreamguystech.com/light/assets/js/app.js"></script>
+
+		<!-- my js -->
+		<script src="{% static 'projectlead/scripts.js' %}"></script>
 		
     </body>
 

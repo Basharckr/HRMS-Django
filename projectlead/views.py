@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, DeleteView
 from django.urls import reverse_lazy
 from hr.models import *
@@ -30,10 +30,23 @@ class TaskCreate(CreateView):
      
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tasks'] = Tasks.objects.all()
+        context['tasks'] = Tasks.objects.all().order_by('-id')
+        context['employee'] = User.objects.filter(is_staff=False, is_superuser=False)
+     
         return context
 
 
-class TaskDelete(DeleteView):
-    model = Tasks
-    uccess_url = reverse_lazy('tasks')
+def task_delete(request, pk):
+   task = Tasks.objects.get(id=pk)
+   task.delete()
+   return redirect('tasks')
+
+def change_task_status(request, pk):
+    task = Tasks.objects.get(id=pk)
+    if task.task_complete == False:
+        task.task_complete = True
+        task.save()
+    else:
+        task.task_complete = False
+        task.save()
+    return redirect('tasks')
