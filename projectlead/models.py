@@ -11,4 +11,7 @@ class Tasks(models.Model):
     task_complete = models.BooleanField(default=False)
 
 
+class Team(models.Model):
+    employee = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
 
