@@ -162,23 +162,23 @@
 									<h6 class="card-title m-b-15">Project details</h6>
 									<table class="table table-striped table-border">
 										<tbody>
-											<tr>
+											<!-- <tr>
 												<td>Cost:</td>
 												<td class="text-right">$1200</td>
-											</tr>
-											<tr>
+											</tr> -->
+											<!-- <tr>
 												<td>Total Hours:</td>
 												<td class="text-right">100 Hours</td>
-											</tr>
+											</tr> -->
 											<tr>
 												<td>Created:</td>
-												<td class="text-right">25 Feb, 2019</td>
+												<td class="text-right">{{object.start_date}}</td>
 											</tr>
 											<tr>
 												<td>Deadline:</td>
-												<td class="text-right">12 Jun, 2019</td>
+												<td class="text-right">{{object.end_date}}</td>
 											</tr>
-											<tr>
+											<!-- <tr>
 												<td>Priority:</td>
 												<td class="text-right">
 													<div class="btn-group">
@@ -191,55 +191,47 @@
 														</div>
 													</div>
 												</td>
-											</tr>
-											<tr>
+											</tr> -->
+											<!-- <tr>
 												<td>Created by:</td>
 												<td class="text-right"><a href="https://smarthr.dreamguystech.com/light/profile.html">Barry Cuda</a></td>
-											</tr>
+											</tr> -->
 											<tr>
 												<td>Status:</td>
 												<td class="text-right">Working</td>
 											</tr>
 										</tbody>
 									</table>
-									<p class="m-b-5">Progress <span class="text-success float-right">40%</span></p>
+									<!-- <p class="m-b-5">Progress <span class="text-success float-right">40%</span></p>
 									<div class="progress progress-xs mb-0">
 										<div class="progress-bar bg-success" role="progressbar" data-toggle="tooltip" title="40%" style="width: 40%"></div>
-									</div>
+									</div> -->
 								</div>
 							</div>
 							<div class="card project-user">
-								<div class="card-body">
+								<div id="ldr-card" class="card-body">
 									<h6 class="card-title m-b-20">Assigned Leader <button type="button" class="float-right btn btn-primary btn-sm" data-toggle="modal" data-target="#assign_leader"><i class="fa fa-plus"></i> Add</button></h6>
 									<ul class="list-box">
-										<li>
+										{% for leader in assigned %}
+										{% if leader.employee.is_staff %}
+										<li>			
 											<a href="https://smarthr.dreamguystech.com/light/profile.html">
 												<div class="list-item">
 													<div class="list-left">
 														<span class="avatar"><img alt="" src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-11.jpg"></span>
 													</div>
 													<div class="list-body">
-														<span class="message-author">Wilmer Deluna</span>
+														<span class="message-author">{{leader.employee.username}}</span>
 														<div class="clearfix"></div>
 														<span class="message-content">Team Leader</span>
 													</div>
 												</div>
 											</a>
+											
 										</li>
-										<li>
-											<a href="https://smarthr.dreamguystech.com/light/profile.html">
-												<div class="list-item">
-													<div class="list-left">
-														<span class="avatar"><img alt="" src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-01.jpg"></span>
-													</div>
-													<div class="list-body">
-														<span class="message-author">Lesley Grauer</span>
-														<div class="clearfix"></div>
-														<span class="message-content">Team Leader</span>
-													</div>
-												</div>
-											</a>
-										</li>
+										{%endif%}
+										{%endfor%}
+										
 									</ul>
 								</div>
 							</div>
@@ -249,36 +241,28 @@
 										Assigned users 
 										<button type="button" class="float-right btn btn-primary btn-sm" data-toggle="modal" data-target="#assign_user"><i class="fa fa-plus"></i> Add</button>
 									</h6>
-									<ul class="list-box">
+									<ul id="emp-card" class="list-box">
+										{% for employee in assigned %}
+										{% if employee.employee.is_staff == False  %}
 										<li>
+											
 											<a href="https://smarthr.dreamguystech.com/light/profile.html">
 												<div class="list-item">
 													<div class="list-left">
 														<span class="avatar"><img alt="" src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-02.jpg"></span>
 													</div>
 													<div class="list-body">
-														<span class="message-author">John Doe</span>
+														<span class="message-author">{{employee.employee.username}}</span>
 														<div class="clearfix"></div>
 														<span class="message-content">Web Designer</span>
 													</div>
 												</div>
 											</a>
 										</li>
-										<li>
-											<a href="https://smarthr.dreamguystech.com/light/profile.html">
-												<div class="list-item">
-													<div class="list-left">
-														<span class="avatar"><img alt="" src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"></span>
-													</div>
-													<div class="list-body">
-														<span class="message-author">Richard Miles</span>
-														<div class="clearfix"></div>
-														<span class="message-content">Web Developer</span>
-													</div>
-												</div>
-											</a>
-										</li>
+										{%endif%}
+										{%endfor%}
 									</ul>
+									
 								</div>
 							</div>
 						</div>
@@ -303,46 +287,23 @@
 									</span>
 								</div>
 								<div>
-									<ul class="chat-user-list">
-										<li>
-											<a href="#">
-												<div class="media">
+									<ul  class="chat-user-list">
+										{% for leader in leaders %}
+										<li  onclick="assignEmployee('{{leader.id}}','{{object.id}}')">
+												<div id="list-{{leader.id}}" class="media">
 													<span class="avatar"><img alt="" src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"></span>
 													<div class="media-body align-self-center text-nowrap">
-														<div class="user-name">Richard Miles</div>
+														<div class="user-name">{{leader}}</div>
 														<span class="designation">Web Developer</span>
 													</div>
 												</div>
-											</a>
 										</li>
-										<li>
-											<a href="#">
-												<div class="media">
-													<span class="avatar"><img alt="" src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-10.jpg"></span>
-													<div class="media-body align-self-center text-nowrap">
-														<div class="user-name">John Smith</div>
-														<span class="designation">Android Developer</span>
-													</div>
-												</div>
-											</a>
-										</li>
-										<li>
-											<a href="#">
-												<div class="media">
-													<span class="avatar">
-														<img alt="" src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-16.jpg">
-													</span>
-													<div class="media-body align-self-center text-nowrap">
-														<div class="user-name">Jeffery Lalor</div>
-														<span class="designation">Team Leader</span>
-													</div>
-												</div>
-											</a>
-										</li>
+										{%endfor%}
+									
 									</ul>
 								</div>
 								<div class="submit-section">
-									<button class="btn btn-primary submit-btn">Submit</button>
+									<button type="button" onclick="submitLdr()" data-dismiss="modal" class="btn btn-primary submit-btn">Submit</button>
 								</div>
 							</div>
 						</div>
@@ -369,45 +330,23 @@
 								</div>
 								<div>
 									<ul class="chat-user-list">
-										<li>
-											<a href="#">
-												<div class="media">
+										{% for employee in employees %}
+										<li onclick="assignEmployee('{{employee.id}}','{{object.id}}')">
+											
+												<div id="list-{{employee.id}}" class="media">
 													<span class="avatar"><img alt="" src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"></span>
 													<div class="media-body align-self-center text-nowrap">
-														<div class="user-name">Richard Miles</div>
+														<div class="user-name">{{employee}}</div>
 														<span class="designation">Web Developer</span>
 													</div>
 												</div>
-											</a>
+											
 										</li>
-										<li>
-											<a href="#">
-												<div class="media">
-													<span class="avatar"><img alt="" src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-10.jpg"></span>
-													<div class="media-body align-self-center text-nowrap">
-														<div class="user-name">John Smith</div>
-														<span class="designation">Android Developer</span>
-													</div>
-												</div>
-											</a>
-										</li>
-										<li>
-											<a href="#">
-												<div class="media">
-													<span class="avatar">
-														<img alt="" src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-16.jpg">
-													</span>
-													<div class="media-body align-self-center text-nowrap">
-														<div class="user-name">Jeffery Lalor</div>
-														<span class="designation">Team Leader</span>
-													</div>
-												</div>
-											</a>
-										</li>
+										{%endfor%}
 									</ul>
 								</div>
 								<div class="submit-section">
-									<button class="btn btn-primary submit-btn">Submit</button>
+									<button type="button" onclick="submitEmp()"data-dismiss="modal" class="btn btn-primary submit-btn">Submit</button>
 								</div>
 							</div>
 						</div>
@@ -491,30 +430,7 @@
 							</div>
 						</div>
 					</div> -->
-							<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label>Add Project Leader</label>
-										<select class="form-control" name="project_leader" id="exampleFormControlSelect2">
-											<option selected>{{project.project_leader.username}}</option>
-											{% for leader in leaders %}
-											<option value="{{leader.id}}">{{leader.username}}</option>
-											{% endfor %}
-										  </select>
-									</div>
-								</div>
-								<!-- <div class="col-sm-6">
-							<div class="form-group">
-								<label>Team Leader</label>
-								<div class="project-members">
-									<a href="#" data-toggle="tooltip" title="Jeffery Lalor" class="avatar">
-										<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-16.jpg"
-											alt="">
-									</a>
-								</div>
-							</div>
-						</div> -->
-							</div>
+					
 							<!-- <div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">

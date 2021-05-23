@@ -8,6 +8,7 @@ User = get_user_model()
 class Tasks(models.Model):
     task = models.TextField(max_length=100, blank=True, null=True)
     employee = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
     task_complete = models.BooleanField(default=False)
 
 
