@@ -5,6 +5,8 @@ from django.contrib.auth.views import LoginView, redirect_to_login, LogoutView
 from django.urls import reverse_lazy
 
 from .forms import SignUpFrom
+from hr.models import *
+from projectlead.models import *
 # Create your views here.
 
 
@@ -36,3 +38,27 @@ class CustomLogoutView(LogoutView):
 
 class EmployeeDashboard(TemplateView):
     template_name = 'employee/emp_dashboard.html'
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     tasks = TaskAssigned.objects.filter(employee=self.request.user).count()
+    #     for task in tasks:
+    #         if task.task.task_complete()
+    #     return context
+
+
+def emp_profile(request):
+ 
+
+    team = Team.objects.all()
+
+ 
+
+    if request.user.is_superuser:
+        project = Project.objects.all()
+
+    else:       
+        project = Team.objects.filter(employee=request.user)
+    context = {
+        'project': project, 'team': team
+    }
+    return render(request, 'account/profile.html', context)

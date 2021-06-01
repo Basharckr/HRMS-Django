@@ -183,7 +183,7 @@
 							<span>{{request.user}}</span>
 						</a>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="https://smarthr.dreamguystech.com/light/profile.html">My Profile</a>
+							<a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
 							<a class="dropdown-item" href="https://smarthr.dreamguystech.com/light/settings.html">Settings</a>
 							<a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
 						</div>
@@ -263,7 +263,7 @@
 							<li class="submenu">
 								<a href="#"><i class="la la-rocket"></i> <span> Projects</span> <span class="menu-arrow"></span></a>
 								<ul style="display: none;">
-									<li><a href="{% url 'list_projects' %}">Projects</a></li>
+									<li><a href="{% url 'projects' %}">Projects</a></li>
 								
 								</ul>
 							</li>
@@ -514,6 +514,7 @@
 
 		<!-- my js -->
 		<script src="{% static 'projectlead/js/scripts.js' %}"></script>
+
 		
     </body>
 

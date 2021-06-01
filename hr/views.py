@@ -5,7 +5,8 @@ from django.contrib.auth.views import LoginView, redirect_to_login
 
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
-from hr.models import Project
+from hr.models import *
+from projectlead.models import *
 from employee.models import User
 from projectlead.models import Team
 from django.db.models import Q
@@ -35,7 +36,12 @@ class ProjectCreate(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['projects'] = Project.objects.all()
+
+        if self.request.user.is_superuser:
+            context['project'] = Project.objects.all()
+        else:       
+            context['project'] = Team.objects.filter(employee=self.request.user)
+            
         context['team'] = Team.objects.all()
         return context
 
@@ -50,7 +56,9 @@ class ProjectDetailView(DetailView):
         employees = User.objects.filter(is_superuser=False)
         context['leader'] = User.objects.filter(is_superuser=False)
         context['assigned'] = Team.objects.filter(project=self.kwargs.get('pk'))
-        print(context['assigned'])
+        context['tasks'] = Tasks.objects.filter(project=self.kwargs.get('pk'))
+
+
 
         employee_list = []
         leader_list = []
@@ -86,12 +94,9 @@ def assign_employee(request, pk, id):
     if  Team.objects.filter(employee=employee, project=project):
         obj = Team.objects.get(employee=employee, project=project)
         obj.delete()
-        print('not')
         return JsonResponse('not selected', safe=False)
     else:
         Team.objects.create(employee=employee, project=project)
-        print('yessssss')
-
         return JsonResponse('selected', safe=False)
        
 

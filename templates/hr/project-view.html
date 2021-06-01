@@ -2,45 +2,50 @@
 {% block title %} projects {% endblock %}
 {% block content %}
 
-				<!-- Page Content -->
-                <div class="content container-fluid">
-				
-					<!-- Page Header -->
-					<div class="page-header">
-						<div class="row align-items-center">
-							<div class="col">
-								<h3 class="page-title">{{object.project_name}}</h3>
-								<ul class="breadcrumb">
-									<li class="breadcrumb-item"><a href="https://smarthr.dreamguystech.com/light/index.html">Dashboard</a></li>
-									<li class="breadcrumb-item active">Project</li>
-								</ul>
-							</div>
-							<div class="col-auto float-right ml-auto">
-								<a href="#" class="btn add-btn" data-toggle="modal" data-target="#edit_project"><i
-										class="fa fa-plus"></i> Edit Project</a>
-								<a href="#" class="btn add-btn" data-toggle="modal" data-target="#delete_project"><i
-									class="fa fa-plus"></i> Delete Project</a>
-								<a href="https://smarthr.dreamguystech.com/light/task-board.html"
-									class="btn btn-white float-right m-r-10" data-toggle="tooltip" title="Task Board"><i
-										class="fa fa-bars"></i></a>
-							</div>
-						
-						</div>
+<!-- Page Content -->
+<div class="content container-fluid">
+
+	<!-- Page Header -->
+	<div class="page-header">
+		<div class="row align-items-center">
+			<div class="col">
+				<h3 class="page-title">{{object.project_name}}</h3>
+				<ul class="breadcrumb">
+					<li class="breadcrumb-item"><a
+							href="https://smarthr.dreamguystech.com/light/index.html">Dashboard</a></li>
+					<li class="breadcrumb-item active">Project</li>
+				</ul>
+			</div>
+			<div class="col-auto float-right ml-auto">
+				{% if request.user.is_superuser %}
+				<a href="#" class="btn add-btn" data-toggle="modal" data-target="#edit_project"><i
+						class="fa fa-plus"></i> Edit Project</a>
+				<a href="#" class="btn add-btn" data-toggle="modal" data-target="#delete_project"><i
+						class="fa fa-plus"></i> Delete Project</a>
+				{% endif %}
+				<a href="https://smarthr.dreamguystech.com/light/task-board.html"
+					class="btn btn-white float-right m-r-10" data-toggle="tooltip" title="Task Board"><i
+						class="fa fa-bars"></i></a>
+			</div>
+
+		</div>
+	</div>
+	<!-- /Page Header -->
+
+	<div class="row">
+		<div class="col-lg-8 col-xl-9">
+			<div class="card">
+				<div class="card-body">
+					<div class="project-title">
+						<h5 class="card-title">{{object.project_name}}</h5>
+						<small class="block text-ellipsis m-b-15"><span class="text-xs">2</span> <span
+								class="text-muted">open tasks, </span><span class="text-xs">5</span> <span
+								class="text-muted">tasks completed</span></small>
 					</div>
-					<!-- /Page Header -->
-					
-					<div class="row">
-						<div class="col-lg-8 col-xl-9">
-							<div class="card">
-								<div class="card-body">
-									<div class="project-title">
-										<h5 class="card-title">{{object.project_name}}</h5>
-										<small class="block text-ellipsis m-b-15"><span class="text-xs">2</span> <span class="text-muted">open tasks, </span><span class="text-xs">5</span> <span class="text-muted">tasks completed</span></small>
-									</div>
-									{{object.description}}
-								</div>
-							</div>
-							<!-- <div class="card">
+					{{object.description}}
+				</div>
+			</div>
+			<!-- <div class="card">
 								<div class="card-body">
 				                    <h5 class="card-title m-b-20">Uploaded image files</h5>
 									<div class="row">
@@ -58,7 +63,7 @@
 									</div>
 								</div>
 							</div> -->
-							<!-- <div class="card">
+			<!-- <div class="card">
 								<div class="card-body">
 									<h5 class="card-title m-b-20">Uploaded files</h5>
 									<ul class="files-list">
@@ -88,97 +93,171 @@
 									</ul>
 								</div>
 							</div> -->
-							<div class="project-task">
-								<ul class="nav nav-tabs nav-tabs-top nav-justified mb-0">
-									<li class="nav-item"><a class="nav-link active" href="#all_tasks" data-toggle="tab" aria-expanded="true">All Tasks</a></li>
-									<li class="nav-item"><a class="nav-link" href="#pending_tasks" data-toggle="tab" aria-expanded="false">Pending Tasks</a></li>
-									<li class="nav-item"><a class="nav-link" href="#completed_tasks" data-toggle="tab" aria-expanded="false">Completed Tasks</a></li>
-								</ul>
-								<div class="tab-content">
-									<div class="tab-pane show active" id="all_tasks">
-										<div class="task-wrapper">
-											<div class="task-list-container">
-												<div class="task-list-body">
-													<ul id="task-list">
-														
-														<li class="task">
-															<div class="task-container">
-																<span class="task-action-btn task-check">
-																	<span class="action-circle large complete-btn" title="Mark Complete">
-																		<i class="material-icons">check</i>
-																	</span>
-																</span>
-																<span class="task-label" contenteditable="true">Appointment booking with payment gateway</span>
-																<span class="task-action-btn task-btn-right">
-																	<span class="action-circle large" title="Assign">
-																		<i class="material-icons">person_add</i>
-																	</span>
-																	<span class="action-circle large delete-btn" title="Delete Task">
-																		<i class="material-icons">delete</i>
-																	</span>
-																</span>
-															</div>
-														</li>
-														<li class="completed task">
-															<div class="task-container">
-																<span class="task-action-btn task-check">
-																	<span class="action-circle large complete-btn" title="Mark Complete">
-																		<i class="material-icons">check</i>
-																	</span>
-																</span>
-																<span class="task-label">Doctor available module</span>
-																<span class="task-action-btn task-btn-right">
-																	<span class="action-circle large" title="Assign">
-																		<i class="material-icons">person_add</i>
-																	</span>
-																	<span class="action-circle large delete-btn" title="Delete Task">
-																		<i class="material-icons">delete</i>
-																	</span>
-																</span>
-															</div>
-														</li>
-													
-													</ul>
-												</div>
-												<div class="task-list-footer">
-													<div class="new-task-wrapper">
-														<textarea  id="new-task" placeholder="Enter new task here. . ."></textarea>
-														<span class="error-message hidden">You need to enter a task first</span>
-														<span class="add-new-task-btn btn" id="add-task">Add Task</span>
-														<span class="btn" id="close-task-panel">Close</span>
-													</div>
-												</div>
+			<div class="project-task">
+				<ul class="nav nav-tabs nav-tabs-top nav-justified mb-0">
+					<li class="nav-item"><a class="nav-link active" href="#all_tasks" data-toggle="tab"
+							aria-expanded="true">All Tasks</a></li>
+					<li class="nav-item"><a class="nav-link" href="#pending_tasks" data-toggle="tab"
+							aria-expanded="false">Pending Tasks</a></li>
+					<li class="nav-item"><a class="nav-link" href="#completed_tasks" data-toggle="tab"
+							aria-expanded="false">Completed Tasks</a></li>
+				</ul>
+				<div id="taskcontent" class="tab-content">
+					<div class="tab-pane show active" id="all_tasks">
+						<div class="task-wrapper">
+							<div class="task-list-container">
+								<div class="task-list-body">
+									<ul id="task-list">
+										{% for task in tasks %}
+										{% if task.task_complete == True %}<li class="completed task">{% else %}
+										<li class="task">{% endif %}
+											<div class="task-container">
+												<span class="task-action-btn task-check">
+													<a href="{% url 'change-task-status' pk=task.id %}"
+														class="action-circle large complete-btn"
+														title="Mark Complete">
+														<i class="material-icons">check</i>
+													</a>
+												</span>
+												<span id="a-{{task.id}}" class="task-label"
+													contenteditable="true">{{task.task}}</span>
+												<span class="task-action-btn task-btn-right">
+													<span data-target="#assignee-{{task.id}}"
+														data-toggle="modal" class="action-circle large"
+														title="Assign">
+														<i class="material-icons">person_add</i>
+													</span>
+													<a href="{% url 'tasks-delete' pk=task.id %}" onclick="taskDelete('{{task.id}}')"
+														class="action-circle large delete-btn"
+														title="Delete Task">
+														<i class="material-icons">delete</i>
+													</a>
+												</span>
 											</div>
-										</div>
+										</li>
+										{% endfor %}
+
+									</ul>
+								</div>
+								<div class="task-list-footer">
+									<div class="new-task-wrapper">
+										<textarea id="new-task" placeholder="Enter new task here. . ."></textarea>
+										<span class="error-message hidden">You need to enter a task first</span>
+										<span class="add-new-task-btn btn" id="add-task">Add Task</span>
+										<span class="btn" id="close-task-panel">Close</span>
 									</div>
-									<div class="tab-pane" id="pending_tasks"></div>
-									<div class="tab-pane" id="completed_tasks"></div>
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-4 col-xl-3">
-							<div class="card">
-								<div class="card-body">
-									<h6 class="card-title m-b-15">Project details</h6>
-									<table class="table table-striped table-border">
-										<tbody>
-											<!-- <tr>
+					</div>
+					<div class="tab-pane" id="pending_tasks">
+						<div class="task-wrapper">
+							<div class="task-list-container">
+								<div class="task-list-body">
+									<ul id="task-list">
+										{% for task in tasks %}
+										{% if task.task_complete == False %}<li class="task">
+											<div class="task-container">
+												<span class="task-action-btn task-check">
+													<span class="action-circle large complete-btn"
+														title="Mark Complete">
+														<i class="material-icons">check</i>
+													</span>
+												</span>
+												<span class="task-label" contenteditable="true">{{task.task}}</span>
+												<span class="task-action-btn task-btn-right">
+													<span class="action-circle large" title="Assign">
+														<i class="material-icons">person_add</i>
+													</span>
+													<span class="action-circle large delete-btn" title="Delete Task">
+														<i class="material-icons">delete</i>
+													</span>
+												</span>
+											</div>
+										</li>
+										{% endif %}
+										{% endfor %}
+
+									</ul>
+								</div>
+								<div class="task-list-footer">
+									<div class="new-task-wrapper">
+										<textarea id="new-task" placeholder="Enter new task here. . ."></textarea>
+										<span class="error-message hidden">You need to enter a task first</span>
+										<span class="add-new-task-btn btn" id="add-task">Add Task</span>
+										<span class="btn" id="close-task-panel">Close</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane" id="completed_tasks">
+						<div class="task-wrapper">
+							<div class="task-list-container">
+								<div class="task-list-body">
+									<ul id="task-list">
+										{% for task in tasks %}
+										{% if task.task_complete == True %}<li class="completed task">
+											<div class="task-container">
+												<span class="task-action-btn task-check">
+													<span class="action-circle large complete-btn"
+														title="Mark Complete">
+														<i class="material-icons">check</i>
+													</span>
+												</span>
+												<span class="task-label" contenteditable="true">{{task.task}}</span>
+												<span class="task-action-btn task-btn-right">
+													<span class="action-circle large" title="Assign">
+														<i class="material-icons">person_add</i>
+													</span>
+													<span class="action-circle large delete-btn" title="Delete Task">
+														<i class="material-icons">delete</i>
+													</span>
+												</span>
+											</div>
+										</li>
+										{% endif %}
+										{% endfor %}
+
+									</ul>
+								</div>
+								<div class="task-list-footer">
+									<div class="new-task-wrapper">
+										<textarea id="new-task" placeholder="Enter new task here. . ."></textarea>
+										<span class="error-message hidden">You need to enter a task first</span>
+										<span class="add-new-task-btn btn" id="add-task">Add Task</span>
+										<span class="btn" id="close-task-panel">Close</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-xl-3">
+			<div class="card">
+				<div class="card-body">
+					<h6 class="card-title m-b-15">Project details</h6>
+					<table class="table table-striped table-border">
+						<tbody>
+							<!-- <tr>
 												<td>Cost:</td>
 												<td class="text-right">$1200</td>
 											</tr> -->
-											<!-- <tr>
+							<!-- <tr>
 												<td>Total Hours:</td>
 												<td class="text-right">100 Hours</td>
 											</tr> -->
-											<tr>
-												<td>Created:</td>
-												<td class="text-right">{{object.start_date}}</td>
-											</tr>
-											<tr>
-												<td>Deadline:</td>
-												<td class="text-right">{{object.end_date}}</td>
-											</tr>
-											<!-- <tr>
+							<tr>
+								<td>Created:</td>
+								<td class="text-right">{{object.start_date}}</td>
+							</tr>
+							<tr>
+								<td>Deadline:</td>
+								<td class="text-right">{{object.end_date}}</td>
+							</tr>
+							<!-- <tr>
 												<td>Priority:</td>
 												<td class="text-right">
 													<div class="btn-group">
@@ -192,218 +271,227 @@
 													</div>
 												</td>
 											</tr> -->
-											<!-- <tr>
+							<!-- <tr>
 												<td>Created by:</td>
 												<td class="text-right"><a href="https://smarthr.dreamguystech.com/light/profile.html">Barry Cuda</a></td>
 											</tr> -->
-											<tr>
-												<td>Status:</td>
-												<td class="text-right">Working</td>
-											</tr>
-										</tbody>
-									</table>
-									<!-- <p class="m-b-5">Progress <span class="text-success float-right">40%</span></p>
+							<tr>
+								<td>Status:</td>
+								<td class="text-right">Working</td>
+							</tr>
+						</tbody>
+					</table>
+					<!-- <p class="m-b-5">Progress <span class="text-success float-right">40%</span></p>
 									<div class="progress progress-xs mb-0">
 										<div class="progress-bar bg-success" role="progressbar" data-toggle="tooltip" title="40%" style="width: 40%"></div>
 									</div> -->
-								</div>
-							</div>
-							<div class="card project-user">
-								<div id="ldr-card" class="card-body">
-									<h6 class="card-title m-b-20">Assigned Leader <button type="button" class="float-right btn btn-primary btn-sm" data-toggle="modal" data-target="#assign_leader"><i class="fa fa-plus"></i> Add</button></h6>
-									<ul class="list-box">
-										{% for leader in assigned %}
-										{% if leader.employee.is_staff %}
-										<li>			
-											<a href="https://smarthr.dreamguystech.com/light/profile.html">
-												<div class="list-item">
-													<div class="list-left">
-														<span class="avatar"><img alt="" src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-11.jpg"></span>
-													</div>
-													<div class="list-body">
-														<span class="message-author">{{leader.employee.username}}</span>
-														<div class="clearfix"></div>
-														<span class="message-content">Team Leader</span>
-													</div>
-												</div>
-											</a>
-											
-										</li>
-										{%endif%}
-										{%endfor%}
-										
-									</ul>
-								</div>
-							</div>
-							<div class="card project-user">
-								<div class="card-body">
-									<h6 class="card-title m-b-20">
-										Assigned users 
-										<button type="button" class="float-right btn btn-primary btn-sm" data-toggle="modal" data-target="#assign_user"><i class="fa fa-plus"></i> Add</button>
-									</h6>
-									<ul id="emp-card" class="list-box">
-										{% for employee in assigned %}
-										{% if employee.employee.is_staff == False  %}
-										<li>
-											
-											<a href="https://smarthr.dreamguystech.com/light/profile.html">
-												<div class="list-item">
-													<div class="list-left">
-														<span class="avatar"><img alt="" src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-02.jpg"></span>
-													</div>
-													<div class="list-body">
-														<span class="message-author">{{employee.employee.username}}</span>
-														<div class="clearfix"></div>
-														<span class="message-content">Web Designer</span>
-													</div>
-												</div>
-											</a>
-										</li>
-										{%endif%}
-										{%endfor%}
-									</ul>
-									
-								</div>
-							</div>
-						</div>
-					</div>
-                </div>
-				<!-- /Page Content -->
-				<!-- Assign Leader Modal -->
-				<div id="assign_leader" class="modal custom-modal fade" role="dialog">
-					<div class="modal-dialog modal-dialog-centered" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title">Assign Leader to this project</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<div class="input-group m-b-30">
-									<input placeholder="Search to add a leader" class="form-control search-input" type="text">
-									<span class="input-group-append">
-										<button class="btn btn-primary">Search</button>
-									</span>
-								</div>
-								<div>
-									<ul  class="chat-user-list">
-										{% for leader in leaders %}
-										<li  onclick="assignEmployee('{{leader.id}}','{{object.id}}')">
-												<div id="list-{{leader.id}}" class="media">
-													<span class="avatar"><img alt="" src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"></span>
-													<div class="media-body align-self-center text-nowrap">
-														<div class="user-name">{{leader}}</div>
-														<span class="designation">Web Developer</span>
-													</div>
-												</div>
-										</li>
-										{%endfor%}
-									
-									</ul>
-								</div>
-								<div class="submit-section">
-									<button type="button" onclick="submitLdr()" data-dismiss="modal" class="btn btn-primary submit-btn">Submit</button>
-								</div>
-							</div>
-						</div>
-					</div>
 				</div>
-				<!-- /Assign Leader Modal -->
-				
-				<!-- Assign User Modal -->
-				<div id="assign_user" class="modal custom-modal fade" role="dialog">
-					<div class="modal-dialog modal-dialog-centered" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title">Assign the user to this project</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<div class="input-group m-b-30">
-									<input placeholder="Search a user to assign" class="form-control search-input" type="text">
-									<span class="input-group-append">
-										<button class="btn btn-primary">Search</button>
-									</span>
-								</div>
-								<div>
-									<ul class="chat-user-list">
-										{% for employee in employees %}
-										<li onclick="assignEmployee('{{employee.id}}','{{object.id}}')">
-											
-												<div id="list-{{employee.id}}" class="media">
-													<span class="avatar"><img alt="" src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"></span>
-													<div class="media-body align-self-center text-nowrap">
-														<div class="user-name">{{employee}}</div>
-														<span class="designation">Web Developer</span>
-													</div>
-												</div>
-											
-										</li>
-										{%endfor%}
-									</ul>
-								</div>
-								<div class="submit-section">
-									<button type="button" onclick="submitEmp()"data-dismiss="modal" class="btn btn-primary submit-btn">Submit</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /Assign User Modal -->
-				
-				<!-- Edit Project Modal -->
-		<div id="edit_project" class="modal custom-modal fade" role="dialog">
-			<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Edit Project</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<form method="post" action="{% url 'update-projects' pk=project.id %}">{% csrf_token %}
-							<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label>Project Name</label>
-										<input class="form-control" name="project_name" value="{{project.project_name}}"
-											type="text">
+			</div>
+			<div class="card project-user">
+				<div id="ldr-card" class="card-body">
+					<h6 class="card-title m-b-20">Assigned Leader {% if request.user.is_superuser %}<button
+							type="button" class="float-right btn btn-primary btn-sm" data-toggle="modal"
+							data-target="#assign_leader"><i class="fa fa-plus"></i> Add</button>
+						{% endif %}</h6>
+					<ul class="list-box">
+						{% for leader in assigned %}
+						{% if leader.employee.is_staff %}
+						<li>
+							<a href="https://smarthr.dreamguystech.com/light/profile.html">
+								<div class="list-item">
+									<div class="list-left">
+										<span class="avatar"><img alt=""
+												src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-11.jpg"></span>
+									</div>
+									<div class="list-body">
+										<span class="message-author">{{leader.employee.username}}</span>
+										<div class="clearfix"></div>
+										<span class="message-content">Team Leader</span>
 									</div>
 								</div>
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label>Client</label>
-										<input class="form-control" name="client" value="{{project.client}}"
-											type="text">
+							</a>
 
+						</li>
+						{%endif%}
+						{%endfor%}
+
+					</ul>
+				</div>
+			</div>
+			<div class="card project-user">
+				<div class="card-body">
+					<h6 class="card-title m-b-20">
+						Assigned users
+						<button type="button" class="float-right btn btn-primary btn-sm" data-toggle="modal"
+							data-target="#assign_user"><i class="fa fa-plus"></i> Add</button>
+					</h6>
+					<ul id="emp-card" class="list-box">
+						{% for employee in assigned %}
+						{% if employee.employee.is_staff == False %}
+						<li>
+
+							<a href="https://smarthr.dreamguystech.com/light/profile.html">
+								<div class="list-item">
+									<div class="list-left">
+										<span class="avatar"><img alt=""
+												src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-02.jpg"></span>
 									</div>
+									<div class="list-body">
+										<span class="message-author">{{employee.employee.username}}</span>
+										<div class="clearfix"></div>
+										<span class="message-content">Web Designer</span>
+									</div>
+								</div>
+							</a>
+						</li>
+						{%endif%}
+						{%endfor%}
+					</ul>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /Page Content -->
+<!-- Assign Leader Modal -->
+<div id="assign_leader" class="modal custom-modal fade" role="dialog">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Assign Leader to this project</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="input-group m-b-30">
+					<input placeholder="Search to add a leader" class="form-control search-input" type="text">
+					<span class="input-group-append">
+						<button class="btn btn-primary">Search</button>
+					</span>
+				</div>
+				<div>
+					<ul class="chat-user-list">
+						{% for leader in leaders %}
+						<li onclick="assignEmployee('{{leader.id}}','{{object.id}}')">
+							<div id="list-{{leader.id}}" class="media">
+								<span class="avatar"><img alt=""
+										src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"></span>
+								<div class="media-body align-self-center text-nowrap">
+									<div class="user-name">{{leader}}</div>
+									<span class="designation">Web Developer</span>
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label>Start Date</label>
-										<div class="cal-icon">
-											<input class="form-control " name="start_date"
-												value="{{project.start_date|date:'Y-m-d'}}" type="date">
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label>End Date</label>
-										<div class="cal-icon">
-											<input class="form-control datetimepicker" name="end_date"
-												value="{{project.end_date|date:'Y-m-d'}}" type="date">
-										</div>
-									</div>
+						</li>
+						{%endfor%}
+
+					</ul>
+				</div>
+				<div class="submit-section">
+					<button type="button" onclick="submitLdr()" data-dismiss="modal"
+						class="btn btn-primary submit-btn">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /Assign Leader Modal -->
+
+<!-- Assign User Modal -->
+<div id="assign_user" class="modal custom-modal fade" role="dialog">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Assign the user to this project</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="input-group m-b-30">
+					<input placeholder="Search a user to assign" class="form-control search-input" type="text">
+					<span class="input-group-append">
+						<button class="btn btn-primary">Search</button>
+					</span>
+				</div>
+				<div>
+					<ul class="chat-user-list">
+						{% for employee in employees %}
+						<li onclick="assignEmployee('{{employee.id}}','{{object.id}}')">
+
+							<div id="list-{{employee.id}}" class="media">
+								<span class="avatar"><img alt=""
+										src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"></span>
+								<div class="media-body align-self-center text-nowrap">
+									<div class="user-name">{{employee}}</div>
+									<span class="designation">Web Developer</span>
 								</div>
 							</div>
-							<!-- <div class="row">
+
+						</li>
+						{%endfor%}
+					</ul>
+				</div>
+				<div class="submit-section">
+					<button type="button" onclick="submitEmp()" data-dismiss="modal"
+						class="btn btn-primary submit-btn">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /Assign User Modal -->
+
+<!-- Edit Project Modal -->
+<div id="edit_project" class="modal custom-modal fade" role="dialog">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Edit Project</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post" action="{% url 'update-projects' pk=project.id %}">{% csrf_token %}
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label>Project Name</label>
+								<input class="form-control" name="project_name" value="{{project.project_name}}"
+									type="text">
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label>Client</label>
+								<input class="form-control" name="client" value="{{project.client}}" type="text">
+
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label>Start Date</label>
+								<div class="cal-icon">
+									<input class="form-control " name="start_date"
+										value="{{project.start_date|date:'Y-m-d'}}" type="date">
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label>End Date</label>
+								<div class="cal-icon">
+									<input class="form-control datetimepicker" name="end_date"
+										value="{{project.end_date|date:'Y-m-d'}}" type="date">
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="row">
 						<div class="col-sm-3">
 							<div class="form-group">
 								<label>Rate</label>
@@ -430,8 +518,8 @@
 							</div>
 						</div>
 					</div> -->
-					
-							<!-- <div class="row">
+
+					<!-- <div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label>Add Team</label>
@@ -463,48 +551,48 @@
 							</div>
 						</div>
 					</div> -->
-							<div class="form-group">
-								<label>Description</label>
-								<textarea rows="4" class="form-control summernote" name="description"
-									placeholder="Enter your message here">{{project.description}}</textarea>
-							</div>
-							<!-- <div class="form-group">
+					<div class="form-group">
+						<label>Description</label>
+						<textarea rows="4" class="form-control summernote" name="description"
+							placeholder="Enter your message here">{{project.description}}</textarea>
+					</div>
+					<!-- <div class="form-group">
 						<label>Upload Files</label>
 						<input class="form-control" type="file">
 					</div> -->
-							<div class="submit-section">
-								<button class="btn btn-primary submit-btn">Submit</button>
-							</div>
-						</form>
+					<div class="submit-section">
+						<button class="btn btn-primary submit-btn">Submit</button>
 					</div>
-				</div>
+				</form>
 			</div>
 		</div>
-		<!-- /Edit Project Modal -->
-			<!-- Delete Project Modal -->
-			<div class="modal custom-modal fade" id="delete_project" role="dialog">
-				<div class="modal-dialog modal-dialog-centered">
-					<div class="modal-content">
-						<div class="modal-body">
-							<div class="form-header">
-								<h3>Delete Project</h3>
-								<p>Are you sure want to delete {{project.project_name}}?</p>
-							</div>
-							<div class="modal-btn delete-action">
-								<div class="row">
-									<div class="col-6">
-										<a href="{% url 'delete-projects' pk=project.id %}" class="btn btn-primary continue-btn">Delete</a>
-									</div>
-									<div class="col-6">
-										<a href="javascript:void(0);" data-dismiss="modal"
-											class="btn btn-primary cancel-btn">Cancel</a>
-									</div>
-								</div>
-							</div>
+	</div>
+</div>
+<!-- /Edit Project Modal -->
+<!-- Delete Project Modal -->
+<div class="modal custom-modal fade" id="delete_project" role="dialog">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="form-header">
+					<h3>Delete Project</h3>
+					<p>Are you sure want to delete {{project.project_name}}?</p>
+				</div>
+				<div class="modal-btn delete-action">
+					<div class="row">
+						<div class="col-6">
+							<a href="{% url 'delete-projects' pk=project.id %}"
+								class="btn btn-primary continue-btn">Delete</a>
+						</div>
+						<div class="col-6">
+							<a href="javascript:void(0);" data-dismiss="modal"
+								class="btn btn-primary cancel-btn">Cancel</a>
 						</div>
 					</div>
 				</div>
 			</div>
-			<!-- /Delete Project Modal -->
+		</div>
+	</div>
+</div>
+<!-- /Delete Project Modal -->
 {% endblock%}
-				

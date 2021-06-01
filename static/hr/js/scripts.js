@@ -28,3 +28,22 @@ function submitLdr(){
 function submitEmp(){    
     $("#emp-card").load(" #emp-card");
 }
+
+
+function taskDelete(pk){
+    var tsk_id = pk
+    console.log('hiiii')
+
+    $.ajax({
+        url: '/tasks-delete/'+tsk_id+'/',
+        method: "GET",
+        success:function(response){
+            if(response=='true'){
+                console.log('hiiii2222222') 
+                window.location.reload()
+            // $("#taskcontent").load(location.href + " #taskcontent");
+        }
+        }
+    })
+
+}

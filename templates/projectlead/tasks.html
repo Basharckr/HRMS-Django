@@ -1,5 +1,5 @@
 {%extends 'projectlead/base.html' %}
-{% block title %} projects {% endblock %}
+{% block title %} Tasks {% endblock %}
 {% block content %}
 
 
@@ -8,17 +8,21 @@
 	<div class="sidebar-inner slimscroll">
 		<div class="sidebar-menu">
 			<ul>
-				<li> 
-					{% if request.user.is_superuser %}<a href="{% url 'hr_dashboard' %}"><i class="la la-home"></i> <span>Back to Home</span></a>
+				<li>
+					{% if request.user.is_superuser %}<a href="{% url 'hr_dashboard' %}"><i class="la la-home"></i>
+						<span>Back to Home</span></a>
 					{% else %}
 					<a href="{% url 'ldr_dashboard' %}"><i class="la la-home"></i> <span>Back to Home</span></a>
 					{% endif %}
-				</li>
-				<li class="menu-title">Projects {% if request.user.is_superuser %} <a href="#" data-toggle="modal" data-target="#create_project"><i class="fa fa-plus"></i></a>{% endif %}</li>
-				<li> 
-					<a href="https://smarthr.dreamguystech.com/light/tasks.html">Project Management</a>
-				</li>
+			 	</li>
+				<li class="menu-title">Projects {% if request.user.is_superuser %} <a href="#" data-toggle="modal"
+						data-target="#create_project"><i class="fa fa-plus"></i></a>{% endif %}</li>
+				{% for project in projects %}
 			
+				<li>
+					<a href="{% url 'project-tasks' pk=project.id %}" >{{project.project_name}}</a>
+				</li>
+				{% endfor %}
 			</ul>
 		</div>
 	</div>
@@ -74,7 +78,7 @@
 																<i class="material-icons">check</i>
 															</a>
 														</span>
-														<span class="task-label"
+														<span id="a-{{task.id}}" class="task-label"
 															contenteditable="true">{{task.task}}</span>
 														<span class="task-action-btn task-btn-right">
 															<span data-target="#assignee-{{task.id}}"
@@ -111,16 +115,18 @@
 																	</span>
 																</div>
 																<div>
-																	{% for employee in employee %}
 																	<ul class="chat-user-list">
-																		<li>
+																	{% for employee in employee %}
+
+																		<li onclick="assignTask('{{employee.id}}','{{task.id}}')">
 																			<a href="#">
-																				<div class="media">
+																				<div id="assigntask-{{employee.id}}" class="media">
 																					<span class="avatar"><img alt=""
 																							src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"></span>
 																					<div
 																						class="media-body align-self-center text-nowrap">
-																						<div class="user-name">{{employee.username}}</div>
+																						<div class="user-name">
+																							{{employee.username}}</div>
 																						<span class="designation">Web
 																							Developer</span>
 																					</div>
@@ -132,7 +138,7 @@
 																</div>
 																<div class="submit-section">
 																	<button
-																		class="btn btn-primary submit-btn">Assign</button>
+																		class="btn btn-primary  submit-btn"data-dismiss="modal" >Assign</button>
 																</div>
 															</div>
 														</div>
@@ -146,10 +152,20 @@
 											</ul>
 										</div>
 										<div class="task-list-footer">
-											<div class="new-task-wrapper">
+											<div class="new-task-wrapper mt-3">
 												<form id="new-task" action="" method="post">{% csrf_token %}
-													<textarea name="task" id="new-task"
+													<textarea name="task" class="mb-0" id="new-task"
 														placeholder="Enter new task here. . ."></textarea>
+													<div class="form-group">
+														<select class="form-control" name="project"
+															id="exampleFormControlSelect1">
+															{% for project in projects %}
+															<option value="{{project.id}}">{{project.project_name}}
+															</option>
+															{% endfor %}
+														</select>
+													</div>
+
 													<span class="error-message hidden">You need to enter a task
 														first</span>
 													<button class="add-new-task-btn btn" id="add-task" type="submit">Add

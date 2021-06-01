@@ -1,8 +1,11 @@
 from django.shortcuts import redirect, render
+from django.db.models import Max
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, DeleteView
 from django.urls import reverse_lazy
 from hr.models import *
 from .models import *
+from django.http import HttpResponse, JsonResponse
+from django.core import serializers
 # Create your views here.
 
 
@@ -12,34 +15,46 @@ class LeaderDashboard(TemplateView):
     template_name = 'projectlead/ldr_dashboard.html'
 
 
-class ProjectView(ListView):
-    model = Project
-    context_object_name = 'projects'
-    template_name='projectlead/ldr_projects.html'
-
 class ProjectDetail(DetailView):
     model = Project
     template_name='projectlead/project-view.html'
 
 
-class TaskCreate(CreateView):
+class TaskCreate(CreateView): 
     model = Tasks
-    fields = ['task',]
+    fields = ['task', 'project',]
     success_url = reverse_lazy('tasks')
     template_name = 'projectlead/tasks.html'
-     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['tasks'] = Tasks.objects.all().order_by('-id')
-        context['employee'] = User.objects.filter(is_staff=False, is_superuser=False)
-     
-        return context
+
+    def get(self, request):
+        tasks = Tasks.objects.filter(project=Project.objects.aggregate(Max('id')).get('id__max'))
+        projects = Project.objects.all().order_by('-id')
+        employee = User.objects.filter(is_superuser=False).exclude(id=request.user.id)
+        context = {
+            'tasks': tasks, 'projects': projects, 'employee': employee
+        }
+        return render(request, 'projectlead/tasks.html', context)
+
+
+def task_view(request, pk):
+    tasks = Tasks.objects.filter(project=pk)
+    projects = Project.objects.all().order_by('-id')
+    employee = User.objects.filter(is_superuser=False).exclude(id=request.user.id)
+    context = {
+        'tasks': tasks, 'projects': projects, 'employee': employee
+    }
+    return render(request, 'projectlead/tasks.html', context)
+
+    # return JsonResponse(serializers.serialize('json', tasks), safe=False)
+
+
 
 
 def task_delete(request, pk):
    task = Tasks.objects.get(id=pk)
    task.delete()
-   return redirect('tasks')
+   return JsonResponse('true', safe=False)
+
 
 def change_task_status(request, pk):
     task = Tasks.objects.get(id=pk)
@@ -50,3 +65,16 @@ def change_task_status(request, pk):
         task.task_complete = False
         task.save()
     return redirect('tasks')
+
+
+def assign_task(request, pk, id):
+    employee = User.objects.get(id=pk)
+    task_id = Tasks.objects.get(id=id)
+
+    if  TaskAssigned.objects.filter(employee=employee, task=task_id):
+        obj = TaskAssigned.objects.get(employee=employee, task=task_id)
+        obj.delete()
+        return JsonResponse('not selected', safe=False)
+    else:
+        TaskAssigned.objects.create(employee=employee, task=task_id)
+        return JsonResponse('selected', safe=False)
