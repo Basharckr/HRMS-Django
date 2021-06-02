@@ -102,5 +102,6 @@ def assign_employee(request, pk, id):
 
     
 
-
+def task_board(request):
+    return render(request, 'hr/task-board.html')
   

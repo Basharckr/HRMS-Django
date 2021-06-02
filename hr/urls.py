@@ -10,6 +10,8 @@ urlpatterns = [
     path('<int:pk>/update-projects/', ProjectUpdate.as_view(), name='update-projects'),
     path('<int:pk>/projects/delete/', project_delete, name='delete-projects'),
     path('<int:pk>/<int:id>/assign/', assign_employee, name='assign-employee'),
+    path('task-board/', task_board, name='task-board'),
+
 
 
 ]

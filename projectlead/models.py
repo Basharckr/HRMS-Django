@@ -8,7 +8,6 @@ User = get_user_model()
 class Tasks(models.Model):
     task = models.TextField(max_length=100, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
-    task_complete = models.BooleanField(default=False)
 
 
 class Team(models.Model):
@@ -19,4 +18,5 @@ class Team(models.Model):
 class TaskAssigned(models.Model):
     employee = models.ForeignKey(User, on_delete=models.CASCADE)
     task = models.ForeignKey(Tasks, on_delete=models.CASCADE)
+    task_status = models.CharField(max_length=100, default='pending')
 
