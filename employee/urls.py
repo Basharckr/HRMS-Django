@@ -7,6 +7,7 @@ urlpatterns = [
     path('logout', CustomLogoutView.as_view(), name='logout'),
     path('register/', SignUpView.as_view(), name='signup'),
     path('profile/', emp_profile, name='profile'),
+    path('profile-update/', profile_update, name='profile-update'),
 
 
     path('employee/dashboard/', EmployeeDashboard.as_view(), name='emp_dashboard'),

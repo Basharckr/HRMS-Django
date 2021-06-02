@@ -115,9 +115,8 @@
 							{% for leader in team %}
 							{% if leader.project_id == project.id and leader.employee.is_staff == True %}
 							<li>
-								<span>{{leader.employee}}</span>
 								<a href="#" data-toggle="tooltip" title="Jeffery Lalor"><img alt=""
-										src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-16.jpg"></a>
+										src="{{leader.employee.imageurl}}"></a>
 							</li>
 							{% endif %}
 							{% endfor%}
@@ -129,9 +128,8 @@
 							{% for employee in team %}
 							{% if employee.project_id == project.id and employee.employee.is_staff == False %}
 							<li>
-								<span>{{employee.employee}}</span>
 								<a href="#" data-toggle="tooltip" title="John Doe"><img alt=""
-										src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-02.jpg"></a>
+										src="{{employee.employee.imageurl}}"></a>
 							</li>
 							{% endif %}
 							{% endfor%}

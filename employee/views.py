@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, UpdateView
 from django.contrib.auth.views import LoginView, redirect_to_login, LogoutView
 
 from django.urls import reverse_lazy
@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from .forms import SignUpFrom
 from hr.models import *
 from projectlead.models import *
+from django.contrib import messages
 # Create your views here.
 
 
@@ -51,7 +52,7 @@ def emp_profile(request):
 
     team = Team.objects.all()
 
- 
+    print('ssssssssssssssssssss',request.user.imageurl)
 
     if request.user.is_superuser:
         project = Project.objects.all()
@@ -62,3 +63,34 @@ def emp_profile(request):
         'project': project, 'team': team
     }
     return render(request, 'account/profile.html', context)
+
+
+def profile_update(request):
+
+    if request.method == 'POST':
+        edit = User.objects.get(id=request.user.id)
+        edit.firstname = request.POST['firstname']
+        edit.lastname = request.POST['lastname']
+        edit.username = request.POST['username']
+        edit.email = request.POST['email']
+        edit.designation = request.POST['designation']
+        edit.number = request.POST['number']
+
+        edit.image = request.FILES.get('picfield')
+
+        if User.objects.filter(username=edit.username).exclude(id=request.user.id).exists():
+                        messages.error(
+                            request, 'This username already taken!!')
+                        return redirect('profile')
+        elif User.objects.filter(email=edit.email).exclude(id=request.user.id).exists():
+            messages.error(request, 'The email already taken!!')
+            return redirect('profile')
+        elif User.objects.filter(number=edit.number).exclude(id=request.user.id).exists():
+            messages.error(request, 'The phone number already taken!!')
+            return redirect('profile')
+        else:
+            edit.save()
+            messages.success(
+                request, 'Profile information updated..')
+            return redirect('profile')
+    return redirect('profile')

@@ -13,7 +13,7 @@ function assignEmployee(pk, id){
                 
             }
             if(response=='not selected'){
-                document.getElementById('list-'+emp_id).style.background ="";
+                document.getElementById('list-'+emp_id).style.background ="#ff3333";
                 $("#emp-card").load(" #emp-card");
             }
         }

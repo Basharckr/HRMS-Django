@@ -18,7 +18,11 @@
 		</div>
 	</div>
 	<!-- /Page Header -->
-
+	{% if messages %}
+	{% for message in messages %}
+	<div class="alert text-center {{ message.tags }}" class=""><strong>{{message}}</strong> </div>
+	{% endfor %}
+	{% endif %}
 	<div class="card mb-0">
 		<div class="card-body">
 			<div class="row">
@@ -26,8 +30,8 @@
 					<div class="profile-view">
 						<div class="profile-img-wrap">
 							<div class="profile-img">
-								<a href="#"><img alt=""
-										src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-02.jpg"></a>
+								<img alt="profile photo"
+										src="{{request.user.imageurl}}">
 							</div>
 						</div>
 						<div class="profile-basic">
@@ -35,8 +39,8 @@
 								<div class="col-md-5">
 									<div class="profile-info-left">
 										<h3 class="user-name m-t-0 mb-0">{{request.user}}</h3>
-										<!-- <h6 class="text-muted">UI/UX Design Team</h6> -->
-										<small class="text-muted">Web Designer</small>
+										<h6 class="text-muted">{{request.user.designation}}</h6>
+										<!-- <small class="text-muted">Web Designer</small> -->
 										<!-- <div class="staff-id">Employee ID : FT-0001</div> -->
 										<div class="small doj text-muted">Date of Join :
 											{{request.user.date_joined|date:'Y-m-d'}}</div>
@@ -101,7 +105,7 @@
 			<div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
 				<ul class="nav nav-tabs nav-tabs-bottom">
 					<!-- <li class="nav-item"><a href="#emp_profile" data-toggle="tab" class="nav-link active">Profile</a></li> -->
-					<li class="nav-item"><a href="#emp_projects" data-toggle="tab" class="nav-link">Projects</a></li>
+					<!-- <li class="nav-item"><a href="#emp_projects" data-toggle="tab" class="nav-link">Projects</a></li> -->
 					<!-- <li class="nav-item"><a href="#bank_statutory" data-toggle="tab" class="nav-link">Bank & Statutory <small class="text-danger">(Admin Only)</small></a></li> -->
 				</ul>
 			</div>
@@ -821,115 +825,64 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<form>
+				<form method="POST" action="{% url 'profile-update' %}" enctype="multipart/form-data">{% csrf_token%}
 					<div class="row">
 						<div class="col-md-12">
 							<div class="profile-img-wrap edit-img">
 								<img class="inline-block"
-									src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-02.jpg"
+									id="outfield" src="{{request.user.imageurl}}"
 									alt="user">
 								<div class="fileupload btn">
 									<span class="btn-text">edit</span>
-									<input class="upload" type="file">
+									<input class="upload" name="picfield" id="picfield" type="file">
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
 										<label>First Name</label>
-										<input type="text" class="form-control" value="John">
+										<input type="text" class="form-control" name="firstname" value="{{request.user.first_name}}">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label>Last Name</label>
-										<input type="text" class="form-control" value="Doe">
+										<input type="text" class="form-control" name="lastname" value="{{request.user.last_name}}">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label>Birth Date</label>
-										<div class="cal-icon">
-											<input class="form-control datetimepicker" type="text" value="05/06/1985">
-										</div>
+										<label>Username</label>
+										<input type="text" class="form-control" name="username" value="{{request.user.username}}">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label>Gender</label>
-										<select class="select form-control">
-											<option value="male selected">Male</option>
-											<option value="female">Female</option>
-										</select>
+										<label>Email</label>
+										<input type="email" class="form-control" name="email" value="{{request.user.email}}">
 									</div>
 								</div>
+							
+						
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<label>Address</label>
-								<input type="text" class="form-control" value="4487 Snowbird Lane">
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label>State</label>
-								<input type="text" class="form-control" value="New York">
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label>Country</label>
-								<input type="text" class="form-control" value="United States">
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label>Pin Code</label>
-								<input type="text" class="form-control" value="10523">
-							</div>
-						</div>
+						
 						<div class="col-md-6">
 							<div class="form-group">
 								<label>Phone Number</label>
-								<input type="text" class="form-control" value="631-889-3206">
+								<input type="text" class="form-control" name="number" value="{{request.user.number}}">
 							</div>
 						</div>
+					
 						<div class="col-md-6">
 							<div class="form-group">
-								<label>Department <span class="text-danger">*</span></label>
-								<select class="select">
-									<option>Select Department</option>
-									<option>Web Development</option>
-									<option>IT Management</option>
-									<option>Marketing</option>
-								</select>
+								<label>Designation</label>
+								<input type="text" class="form-control" name="designation" value="{{request.user.designation}}">
 							</div>
 						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label>Designation <span class="text-danger">*</span></label>
-								<select class="select">
-									<option>Select Designation</option>
-									<option>Web Designer</option>
-									<option>Web Developer</option>
-									<option>Android Developer</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label>Reports To <span class="text-danger">*</span></label>
-								<select class="select">
-									<option>-</option>
-									<option>Wilmer Deluna</option>
-									<option>Lesley Grauer</option>
-									<option>Jeffery Lalor</option>
-								</select>
-							</div>
-						</div>
+						
 					</div>
 					<div class="submit-section">
 						<button class="btn btn-primary submit-btn">Submit</button>
@@ -1445,5 +1398,25 @@
 	</div>
 </div>
 <!-- /Experience Modal -->
-
+<script>
+	document.getElementById('picfield').onchange = function (evt) {
+		var tgt = evt.target || window.event.srcElement,
+			files = tgt.files;
+	
+		// FileReader support
+		if (FileReader && files && files.length) {
+			var fr = new FileReader();
+			fr.onload = function () {
+				document.getElementById('outfield').src = fr.result;
+			}
+			fr.readAsDataURL(files[0]);
+		}
+	
+		// Not supported
+		else {
+			// fallback -- perhaps submit the input to an iframe and temporarily store
+			// them on the server until the user's session ends.
+		}
+	}
+</script>
 {% endblock%}
