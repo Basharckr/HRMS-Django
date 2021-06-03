@@ -102,6 +102,55 @@ def assign_employee(request, pk, id):
 
     
 
-def task_board(request):
-    return render(request, 'hr/task-board.html')
-  
+def task_board(request, pk):
+    project = Project.objects.get(id=pk)
+    project_task = Tasks.objects.filter(project=pk)
+    team = Team.objects.filter(project=pk)
+    employees = User.objects.filter(is_superuser=False)
+    taskassigned = TaskAssigned.objects.all()
+
+    employee_list = []
+    leader_list = []
+
+    for employee in employees:
+        if employee.is_staff==True:
+            leader_list.append(employee)
+        else:
+            employee_list.append(employee)
+            
+
+
+    context = {
+        'project_task': project_task, 'team':team, 'employees':employee_list, 'leaders':leader_list,
+        'object': pk, 'taskassigned': taskassigned, 'project': project}
+    return render(request, 'hr/task-board.html', context)
+
+def add_new_task(request, pk):
+    project = Project.objects.get(id=pk)
+    if request.method == 'POST':
+        task = request.POST['task']
+        priority = request.POST['priority']
+        due_date = request.POST['due_date']
+        Tasks.objects.create(task=task, task_priority=priority, due_date=due_date, project=project)
+        print('createdddddddddddddddddddd')
+        return redirect('task-board', pk=pk)
+    else:
+        return redirect('task-board')
+
+def task_delete(request, pk, id):
+   task = Tasks.objects.get(id=pk)
+   task.delete()
+   return redirect('task-board', pk=id)
+
+
+def edit_task(request, pk, id):
+    task = Tasks.objects.get(id=pk)
+    if request.method == 'POST':
+        task.task = request.POST['task']
+        task.task_priority = request.POST['priority']
+        task.due_date = request.POST['due_date']
+        task.save()
+        print('updatedddddd')
+        return redirect('task-board', pk=id)
+    else:
+        return redirect('task-board', pk=id)

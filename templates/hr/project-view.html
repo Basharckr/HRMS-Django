@@ -23,7 +23,7 @@
 				<a href="#" class="btn add-btn" data-toggle="modal" data-target="#delete_project"><i
 						class="fa fa-plus"></i> Delete Project</a>
 				{% endif %}
-				<a href="{% url 'task-board' %}"
+				<a href="{% url 'task-board' pk=object.id %}"
 					class="btn btn-white float-right m-r-10" data-toggle="tooltip" title="Task Board"><i
 						class="fa fa-bars"></i></a>
 			</div>
@@ -38,9 +38,9 @@
 				<div class="card-body">
 					<div class="project-title">
 						<h5 class="card-title">{{object.project_name}}</h5>
-						<small class="block text-ellipsis m-b-15"><span class="text-xs">2</span> <span
+						<!-- <small class="block text-ellipsis m-b-15"><span class="text-xs">2</span> <span
 								class="text-muted">open tasks, </span><span class="text-xs">5</span> <span
-								class="text-muted">tasks completed</span></small>
+								class="text-muted">tasks completed</span></small> -->
 					</div>
 					{{object.description}}
 				</div>
@@ -96,9 +96,9 @@
 			<div class="project-task">
 				<ul class="nav nav-tabs nav-tabs-top nav-justified mb-0">
 					<li class="nav-item"><a class="nav-link active" href="#all_tasks" data-toggle="tab"
-							aria-expanded="true">All Tasks</a></li>
+							aria-expanded="true">Pending Task</a></li>
 					<li class="nav-item"><a class="nav-link" href="#pending_tasks" data-toggle="tab"
-							aria-expanded="false">Pending Tasks</a></li>
+							aria-expanded="false">Progress Tasks</a></li>
 					<li class="nav-item"><a class="nav-link" href="#completed_tasks" data-toggle="tab"
 							aria-expanded="false">Completed Tasks</a></li>
 				</ul>
@@ -297,11 +297,11 @@
 						{% for leader in assigned %}
 						{% if leader.employee.is_staff %}
 						<li>
-							<a href="https://smarthr.dreamguystech.com/light/profile.html">
+							<a href="#">
 								<div class="list-item">
 									<div class="list-left">
 										<span class="avatar"><img alt=""
-												src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-11.jpg"></span>
+									src="{{leader.employee.imageurl}}"></span>
 									</div>
 									<div class="list-body">
 										<span class="message-author">{{leader.employee.username}}</span>
@@ -330,11 +330,11 @@
 						{% if employee.employee.is_staff == False %}
 						<li>
 
-							<a href="https://smarthr.dreamguystech.com/light/profile.html">
+							<a href="#">
 								<div class="list-item">
 									<div class="list-left">
 										<span class="avatar"><img alt=""
-												src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-02.jpg"></span>
+												src="{{employee.employee.imageurl}}"></span>
 									</div>
 									<div class="list-body">
 										<span class="message-author">{{employee.employee.username}}</span>
@@ -377,10 +377,10 @@
 						<li onclick="assignEmployee('{{leader.id}}','{{object.id}}')">
 							<div id="list-{{leader.id}}" class="media">
 								<span class="avatar"><img alt=""
-										src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"></span>
+										src="{{leader.imageurl}}"></span>
 								<div class="media-body align-self-center text-nowrap">
 									<div class="user-name">{{leader}}</div>
-									<span class="designation">Web Developer</span>
+									<span class="designation">{{leader.designation}}</span>
 								</div>
 							</div>
 						</li>
@@ -422,10 +422,10 @@
 
 							<div id="list-{{employee.id}}" class="media">
 								<span class="avatar"><img alt=""
-										src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"></span>
+										src="{{employee.imageurl}}"></span>
 								<div class="media-body align-self-center text-nowrap">
 									<div class="user-name">{{employee}}</div>
-									<span class="designation">Web Developer</span>
+									<span class="designation">{{employee.designation}}</span>
 								</div>
 							</div>
 

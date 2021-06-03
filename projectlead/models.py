@@ -7,7 +7,10 @@ User = get_user_model()
 
 class Tasks(models.Model):
     task = models.TextField(max_length=100, blank=True, null=True)
+    task_priority = models.CharField(max_length=100, default='low') 
+    due_date = models.DateField(blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
+    status = models.CharField(max_length=100, default='pending')
 
 
 class Team(models.Model):

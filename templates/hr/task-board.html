@@ -10,10 +10,9 @@
 	<div class="page-header">
 		<div class="row">
 			<div class="col-sm-12">
-				<h3 class="page-title">Hospital Admin</h3>
+				<h3 class="page-title">{{project.project_name}}</h3>
 				<ul class="breadcrumb">
-					<li class="breadcrumb-item"><a
-							href="{% url 'login' %}">Dashboard</a></li>
+					<li class="breadcrumb-item"><a href="{% url 'login' %}">Dashboard</a></li>
 					<li class="breadcrumb-item active">Task Board</li>
 				</ul>
 			</div>
@@ -26,12 +25,15 @@
 			<div class="pro-teams">
 				<div class="pro-team-lead">
 					<h4>Lead</h4>
-					<div class="avatar-group">
+					<div id="ldr-card" class="avatar-group">
+						{% for leader in team %}
+						{% if leader.employee.is_staff%}
 						<div class="avatar">
 							<img class="avatar-img rounded-circle border border-white" alt="User Image"
-								src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-11.jpg">
+								src="{{leader.employee.imageurl}}">
 						</div>
-						
+						{%endif%}
+						{%endfor%}
 						<div class="avatar">
 							<a href="#" class="avatar-title rounded-circle border border-white" data-toggle="modal"
 								data-target="#assign_leader"><i class="fa fa-plus"></i></a>
@@ -40,12 +42,16 @@
 				</div>
 				<div class="pro-team-members">
 					<h4>Team</h4>
-					<div class="avatar-group">
+
+					<div id="emp-card" class="avatar-group">
+						{% for employee in team %}
+						{% if employee.employee.is_staff == False%}
 						<div class="avatar">
 							<img class="avatar-img rounded-circle border border-white" alt="User Image"
-								src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-02.jpg">
+								src="{{employee.employee.imageurl}}">
 						</div>
-					
+						{%endif%}
+						{%endfor%}
 						<div class="avatar">
 							<a href="#" class="avatar-title rounded-circle border border-white" data-toggle="modal"
 								data-target="#assign_user"><i class="fa fa-plus"></i></a>
@@ -55,13 +61,13 @@
 			</div>
 		</div>
 		<div class="col-8 text-right">
-			<a href="#" class="btn btn-white float-right ml-2" data-toggle="modal" data-target="#add_task_board"><i
-					class="fa fa-plus"></i> Create List</a>
-			<a href="https://smarthr.dreamguystech.com/light/project-view.html" class="btn btn-white float-right"
+			<!-- <a href="#" class="btn btn-white float-right ml-2" data-toggle="modal" data-target="#add_task_board"><i
+					class="fa fa-plus"></i> Create List</a> -->
+			<a href="{% url 'view-project' pk=object %}" class="btn btn-white float-right"
 				title="View Board"><i class="fa fa-link"></i></a>
 		</div>
 
-		<div class="col-12">
+		<!-- <div class="col-12">
 			<div class="pro-progress">
 				<div class="pro-progress-bar">
 					<h4>Progress</h4>
@@ -71,16 +77,16 @@
 					<span>20%</span>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 
 	<div class="kanban-board card mb-0">
-		<div class="card-body">
+		<div id="lll" class="card-body">
 			<div class="kanban-cont">
 				<div class="kanban-list kanban-danger">
 					<div class="kanban-header">
 						<span class="status-title">Pending</span>
-						<div class="dropdown kanban-action">
+						<!-- <div class="dropdown kanban-action">
 							<a href="#" data-toggle="dropdown">
 								<i class="fa fa-ellipsis-v"></i>
 							</a>
@@ -89,125 +95,188 @@
 									data-target="#edit_task_board">Edit</a>
 								<a class="dropdown-item" href="#">Delete</a>
 							</div>
-						</div>
+						</div> -->
 					</div>
 					<div class="kanban-wrap">
+						{% for task in project_task %}
+						{% if task.status == "pending" %}
 						<div class="card panel">
 							<div class="kanban-box">
 								<div class="task-board-header">
 									<span class="status-title"><a
-											href="https://smarthr.dreamguystech.com/light/task-view.html">Website
-											redesign</a></span>
+											href="#">{{task.task}}</a></span>
 									<div class="dropdown kanban-task-action">
 										<a href="#" data-toggle="dropdown">
 											<i class="fa fa-angle-down"></i>
 										</a>
 										<div class="dropdown-menu dropdown-menu-right">
+
 											<a class="dropdown-item" href="#" data-toggle="modal"
-												data-target="#edit_task_modal">Edit</a>
-											<a class="dropdown-item" href="#">Delete</a>
+												data-target="#edit_task_modal-{{task.id}}">Edit</a>
+											<a class="dropdown-item"
+												href="{% url 'task-delete' pk=task.id id=object %}">Delete</a>
 										</div>
 									</div>
 								</div>
 								<div class="task-board-body">
-									<div class="kanban-info">
+									<!-- <div class="kanban-info">
 										<div class="progress progress-xs">
 											<div class="progress-bar" role="progressbar" style="width: 20%"
 												aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
 										</div>
 										<span>70%</span>
-									</div>
+									</div> -->
 									<div class="kanban-footer">
 										<span class="task-info-cont">
-											<span class="task-date"><i class="fa fa-clock-o"></i> Sep 26</span>
-											<span class="task-priority badge bg-inverse-danger">High</span>
+											<span class="task-date"><i
+													class="fa fa-clock-o"></i>{{task.due_date}}</span>
+											{% if task.task_priority == "low" %}
+											<span
+												class="task-priority badge bg-inverse-success">{{task.task_priority}}</span>
+											{% elif task.task_priority == "normal" %}
+											<span
+												class="task-priority badge bg-inverse-warning">{{task.task_priority}}</span>
+											{% elif task.task_priority == "high" %}
+											<span
+												class="task-priority badge bg-inverse-danger">{{task.task_priority}}</span>
+											{%endif%}
 										</span>
 										<span class="task-users">
-											<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-12.jpg"
-												class="task-avatar" width="24" height="24" alt="">
+											{% for taskuser in taskassigned%}
+											{% if taskuser.task.id == task.id %}
+											<img src="{{taskuser.employee.imageurl}}" class="task-avatar" width="24"
+												height="24" alt="">
+											{%endif%}
+											{%endfor%}
+											<span data-target="#assignee-{{task.id}}" data-toggle="modal"
+												class="action-circle large" title="Assign">
+												<i class="material-icons">person_add</i>
+											</span>
+											<!-- <span class="task-user-count">+2</span> -->
 										</span>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="card panel">
-							<div class="kanban-box">
-								<div class="task-board-header">
-									<span class="status-title"><a
-											href="https://smarthr.dreamguystech.com/light/task-view.html">Make a
-											wireframe</a></span>
-									<div class="dropdown kanban-task-action">
-										<a href="#" data-toggle="dropdown">
-											<i class="fa fa-angle-down"></i>
-										</a>
-										<div class="dropdown-menu dropdown-menu-right">
-											<a class="dropdown-item" href="#" data-toggle="modal"
-												data-target="#edit_task_modal">Edit</a>
-											<a class="dropdown-item" href="#">Delete</a>
-										</div>
+						<!-- Assignee Modal -->
+						<div id="assignee-{{task.id}}" class="modal custom-modal fade" role="dialog">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title">Assign to this task</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
 									</div>
-								</div>
-								<div class="task-board-body">
-									<div class="kanban-info">
-										<div class="progress progress-xs">
-											<div class="progress-bar" role="progressbar" style="width: 20%"
-												aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+									<div class="modal-body">
+										<div class="input-group m-b-30">
+											<input placeholder="Search to add" class="form-control search-input"
+												type="text">
+											<span class="input-group-append">
+												<button class="btn btn-primary">Search</button>
+											</span>
 										</div>
-										<span>70%</span>
-									</div>
-									<div class="kanban-footer">
-										<span class="task-info-cont">
-											<span class="task-date"><i class="fa fa-clock-o"></i> Sep 26</span>
-											<span class="task-priority badge bg-inverse-success">Low</span>
-										</span>
-										<span class="task-users">
-											<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-12.jpg"
-												class="task-avatar" width="24" height="24" alt="">
-											<span class="task-user-count">+2</span>
-										</span>
+										<div>
+											<ul class="chat-user-list">
+												{% for employee in employees %}
+
+												<li onclick="assignTask('{{employee.id}}','{{task.id}}')">
+													<a href="#">
+														<div id="assigntask-{{task.id}}{{employee.id}}" class="media">
+															<span class="avatar"><img alt=""
+																	src="{{employee.imageurl}}"></span>
+															<div class="media-body align-self-center text-nowrap">
+																<div class="user-name">
+																	{{employee.username}}</div>
+																<span
+																	class="designation">{{employee.designation}}</span>
+															</div>
+														</div>
+													</a>
+												</li>
+												{% endfor%}
+											</ul>
+										</div>
+										<div class="submit-section">
+											<button class="btn btn-primary  submit-btn" onclick="submitAssign()"
+												data-dismiss="modal">Assign</button>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="card panel">
-							<div class="kanban-box">
-								<div class="task-board-header">
-									<span class="status-title"><a
-											href="https://smarthr.dreamguystech.com/light/task-view.html">Website
-											redesign</a></span>
-									<div class="dropdown kanban-task-action">
-										<a href="#" data-toggle="dropdown">
-											<i class="fa fa-angle-down"></i>
-										</a>
-										<div class="dropdown-menu dropdown-menu-right">
-											<a class="dropdown-item" href="#" data-toggle="modal"
-												data-target="#edit_task_modal">Edit</a>
-											<a class="dropdown-item" href="#">Delete</a>
-										</div>
+						<!-- /Assignee Modal -->
+
+						<!-- Edit Task Modal -->
+						<div id="edit_task_modal-{{task.id}}" class="modal custom-modal fade" role="dialog">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h4 class="modal-title">Edit Task</h4>
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
 									</div>
-								</div>
-								<div class="task-board-body">
-									<div class="kanban-info">
-										<div class="progress progress-xs">
-											<div class="progress-bar" role="progressbar" style="width: 20%"
-												aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-										</div>
-										<span>70%</span>
-									</div>
-									<div class="kanban-footer">
-										<span class="task-info-cont">
-											<span class="task-date"><i class="fa fa-clock-o"></i> Sep 26</span>
-											<span class="task-priority badge bg-inverse-warning">Normal</span>
-										</span>
-										<span class="task-users">
-											<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-12.jpg"
-												class="task-avatar" width="24" height="24" alt="">
-											<span class="task-user-count">+2</span>
-										</span>
+									<div class="modal-body">
+										<form method="POST" action="{% url 'edit-task' pk=task.id id=object %}">{% csrf_token %}
+											<div class="form-group">
+												<label>Task Name</label>
+												<input type="text" name="task" class="form-control" value="{{task.task}}">
+											</div>
+											<div class="form-group">
+												<label>Task Priority</label>
+												<select name="priority" class="form-control select">
+													<option selected>{{task.task_priority}}</option>
+
+													<option value="low">Low</option>
+													<option value="normal">Normal</option>
+													<option value="high">High</option>
+												</select>
+											</div>
+											<div class="form-group">
+												<label>Due Date</label>
+												<div >
+													<input class="form-control" type="date"
+													name="due_date"	value="{{task.due_date|date:"Y-m-d" }}">
+												</div>
+											</div>
+											<!-- <div class="form-group">
+						<label>Task Followers</label>
+						<input type="text" class="form-control" placeholder="Search to add">
+						<div class="task-follower-list">
+							<span data-toggle="tooltip" title="John Doe">
+								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-02.jpg"
+									class="avatar" alt="John Doe" width="20" height="20">
+								<i class="fa fa-times"></i>
+							</span>
+							<span data-toggle="tooltip" title="Richard Miles">
+								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"
+									class="avatar" alt="Richard Miles" width="20" height="20">
+								<i class="fa fa-times"></i>
+							</span>
+							<span data-toggle="tooltip" title="John Smith">
+								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-10.jpg"
+									class="avatar" alt="John Smith" width="20" height="20">
+								<i class="fa fa-times"></i>
+							</span>
+							<span data-toggle="tooltip" title="Mike Litorus">
+								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-05.jpg"
+									class="avatar" alt="Mike Litorus" width="20" height="20">
+								<i class="fa fa-times"></i>
+							</span>
+						</div>
+					</div> -->
+											<div class="submit-section text-center">
+												<button class="btn btn-primary submit-btn">Submit</button>
+											</div>
+										</form>
 									</div>
 								</div>
 							</div>
 						</div>
+						<!-- /Edit Task Modal -->
+
+						{%endif%}
+						{% endfor %}
+
 					</div>
 					<div class="add-new-task">
 						<a href="javascript:void(0);" data-toggle="modal" data-target="#add_task_modal">Add New Task</a>
@@ -216,7 +285,7 @@
 				<div class="kanban-list kanban-info">
 					<div class="kanban-header">
 						<span class="status-title">Progress</span>
-						<div class="dropdown kanban-action">
+						<!-- <div class="dropdown kanban-action">
 							<a href="#" data-toggle="dropdown">
 								<i class="fa fa-ellipsis-v"></i>
 							</a>
@@ -225,95 +294,197 @@
 									data-target="#edit_task_board">Edit</a>
 								<a class="dropdown-item" href="#">Delete</a>
 							</div>
-						</div>
+						</div> -->
 					</div>
 					<div class="kanban-wrap">
+						{% for task in project_task %}
+						{% if task.status == "progress" %}
 						<div class="card panel">
 							<div class="kanban-box">
 								<div class="task-board-header">
 									<span class="status-title"><a
-											href="https://smarthr.dreamguystech.com/light/task-view.html">Website
-											redesign</a></span>
+											href="#">{{task.task}}</a></span>
 									<div class="dropdown kanban-task-action">
 										<a href="#" data-toggle="dropdown">
 											<i class="fa fa-angle-down"></i>
 										</a>
 										<div class="dropdown-menu dropdown-menu-right">
+
 											<a class="dropdown-item" href="#" data-toggle="modal"
-												data-target="#edit_task_modal">Edit</a>
-											<a class="dropdown-item" href="#">Delete</a>
+												data-target="#edit_task_modal-{{task.id}}">Edit</a>
+											<a class="dropdown-item"
+												href="{% url 'task-delete' pk=task.id id=object %}">Delete</a>
 										</div>
 									</div>
 								</div>
 								<div class="task-board-body">
-									<div class="kanban-info">
+									<!-- <div class="kanban-info">
 										<div class="progress progress-xs">
 											<div class="progress-bar" role="progressbar" style="width: 20%"
 												aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
 										</div>
 										<span>70%</span>
-									</div>
+									</div> -->
 									<div class="kanban-footer">
 										<span class="task-info-cont">
-											<span class="task-date"><i class="fa fa-clock-o"></i> Sep 26</span>
-											<span class="task-priority badge bg-inverse-warning">Normal</span>
+											<span class="task-date"><i
+													class="fa fa-clock-o"></i>{{task.due_date}}</span>
+											{% if task.task_priority == "low" %}
+											<span
+												class="task-priority badge bg-inverse-success">{{task.task_priority}}</span>
+											{% elif task.task_priority == "normal" %}
+											<span
+												class="task-priority badge bg-inverse-warning">{{task.task_priority}}</span>
+											{% elif task.task_priority == "high" %}
+											<span
+												class="task-priority badge bg-inverse-danger">{{task.task_priority}}</span>
+											{%endif%}
 										</span>
 										<span class="task-users">
-											<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-12.jpg"
-												class="task-avatar" width="24" height="24" alt="">
+											{% for taskuser in taskassigned%}
+											{% if taskuser.task.id == task.id %}
+											<img src="{{taskuser.employee.imageurl}}" class="task-avatar" width="24"
+												height="24" alt="">
+											{%endif%}
+											{%endfor%}
+											<span data-target="#assignee-{{task.id}}" data-toggle="modal"
+												class="action-circle large" title="Assign">
+												<i class="material-icons">person_add</i>
+											</span>
+											<!-- <span class="task-user-count">+2</span> -->
 										</span>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="card panel">
-							<div class="kanban-box">
-								<div class="task-board-header">
-									<span class="status-title"><a
-											href="https://smarthr.dreamguystech.com/light/task-view.html">Website
-											redesign</a></span>
-									<div class="dropdown kanban-task-action">
-										<a href="#" data-toggle="dropdown">
-											<i class="fa fa-angle-down"></i>
-										</a>
-										<div class="dropdown-menu dropdown-menu-right">
-											<a class="dropdown-item" href="#" data-toggle="modal"
-												data-target="#edit_task_modal">Edit</a>
-											<a class="dropdown-item" href="#">Delete</a>
-										</div>
+						<!-- Assignee Modal -->
+						<div id="assignee-{{task.id}}" class="modal custom-modal fade" role="dialog">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title">Assign to this task</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
 									</div>
-								</div>
-								<div class="task-board-body">
-									<div class="kanban-info">
-										<div class="progress progress-xs">
-											<div class="progress-bar" role="progressbar" style="width: 20%"
-												aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+									<div class="modal-body">
+										<div class="input-group m-b-30">
+											<input placeholder="Search to add" class="form-control search-input"
+												type="text">
+											<span class="input-group-append">
+												<button class="btn btn-primary">Search</button>
+											</span>
 										</div>
-										<span>70%</span>
-									</div>
-									<div class="kanban-footer">
-										<span class="task-info-cont">
-											<span class="task-date"><i class="fa fa-clock-o"></i> Sep 26</span>
-											<span class="task-priority badge bg-inverse-danger">High</span>
-										</span>
-										<span class="task-users">
-											<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-12.jpg"
-												class="task-avatar" width="24" height="24" alt="">
-											<span class="task-user-count">+2</span>
-										</span>
+										<div>
+											<ul class="chat-user-list">
+												{% for employee in employees %}
+
+												<li onclick="assignTask('{{employee.id}}','{{task.id}}')">
+													<a href="#">
+														<div id="assigntask-{{task.id}}{{employee.id}}" class="media">
+															<span class="avatar"><img alt=""
+																	src="{{employee.imageurl}}"></span>
+															<div class="media-body align-self-center text-nowrap">
+																<div class="user-name">
+																	{{employee.username}}</div>
+																<span
+																	class="designation">{{employee.designation}}</span>
+															</div>
+														</div>
+													</a>
+												</li>
+												{% endfor%}
+											</ul>
+										</div>
+										<div class="submit-section">
+											<button class="btn btn-primary  submit-btn" onclick="submitAssign()"
+												data-dismiss="modal">Assign</button>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+						<!-- /Assignee Modal -->
+
+						<!-- Edit Task Modal -->
+						<div id="edit_task_modal-{{task.id}}" class="modal custom-modal fade" role="dialog">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h4 class="modal-title">Edit Task</h4>
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+									</div>
+									<div class="modal-body">
+										<form method="POST" action="{% url 'edit-task' pk=task.id id=object %}">{% csrf_token %}
+											<div class="form-group">
+												<label>Task Name</label>
+												<input type="text" name="task" class="form-control" value="{{task.task}}">
+											</div>
+											<div class="form-group">
+												<label>Task Priority</label>
+												<select name="priority" class="form-control select">
+													<option selected>{{task.task_priority}}</option>
+
+													<option value="low">Low</option>
+													<option value="normal">Normal</option>
+													<option value="high">High</option>
+												</select>
+											</div>
+											<div class="form-group">
+												<label>Due Date</label>
+												<div >
+													<input class="form-control" type="date"
+													name="due_date"	value="{{task.due_date|date:"Y-m-d" }}">
+												</div>
+											</div>
+											<!-- <div class="form-group">
+						<label>Task Followers</label>
+						<input type="text" class="form-control" placeholder="Search to add">
+						<div class="task-follower-list">
+							<span data-toggle="tooltip" title="John Doe">
+								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-02.jpg"
+									class="avatar" alt="John Doe" width="20" height="20">
+								<i class="fa fa-times"></i>
+							</span>
+							<span data-toggle="tooltip" title="Richard Miles">
+								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"
+									class="avatar" alt="Richard Miles" width="20" height="20">
+								<i class="fa fa-times"></i>
+							</span>
+							<span data-toggle="tooltip" title="John Smith">
+								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-10.jpg"
+									class="avatar" alt="John Smith" width="20" height="20">
+								<i class="fa fa-times"></i>
+							</span>
+							<span data-toggle="tooltip" title="Mike Litorus">
+								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-05.jpg"
+									class="avatar" alt="Mike Litorus" width="20" height="20">
+								<i class="fa fa-times"></i>
+							</span>
+						</div>
+					</div> -->
+											<div class="submit-section text-center">
+												<button class="btn btn-primary submit-btn">Submit</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /Edit Task Modal -->
+
+						{%endif%}
+						{% endfor %}
+
 					</div>
-					<div class="add-new-task">
+					<!-- <div class="add-new-task">
 						<a href="javascript:void(0);" data-toggle="modal" data-target="#add_task_modal">Add New Task</a>
-					</div>
+					</div> -->
 				</div>
 				<div class="kanban-list kanban-success">
 					<div class="kanban-header">
 						<span class="status-title">Completed</span>
-						<div class="dropdown kanban-action">
+						<!-- <div class="dropdown kanban-action">
 							<a href="#" data-toggle="dropdown">
 								<i class="fa fa-ellipsis-v"></i>
 							</a>
@@ -322,16 +493,195 @@
 									data-target="#edit_task_board">Edit</a>
 								<a class="dropdown-item" href="#">Delete</a>
 							</div>
+						</div> -->
+					</div>
+					<div class="kanban-wrap">
+						{% for task in project_task %}
+						{% if task.status == "completed" %}
+						<div class="card panel">
+							<div class="kanban-box">
+								<div class="task-board-header">
+									<span class="status-title"><a
+											href="#">{{task.task}}</a></span>
+									<div class="dropdown kanban-task-action">
+										<a href="#" data-toggle="dropdown">
+											<i class="fa fa-angle-down"></i>
+										</a>
+										<div class="dropdown-menu dropdown-menu-right">
+
+											<a class="dropdown-item" href="#" data-toggle="modal"
+												data-target="#edit_task_modal-{{task.id}}">Edit</a>
+											<a class="dropdown-item"
+												href="{% url 'task-delete' pk=task.id id=object %}">Delete</a>
+										</div>
+									</div>
+								</div>
+								<div class="task-board-body">
+									<!-- <div class="kanban-info">
+										<div class="progress progress-xs">
+											<div class="progress-bar" role="progressbar" style="width: 20%"
+												aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+										</div>
+										<span>70%</span>
+									</div> -->
+									<div class="kanban-footer">
+										<span class="task-info-cont">
+											<span class="task-date"><i
+													class="fa fa-clock-o"></i>{{task.due_date}}</span>
+											{% if task.task_priority == "low" %}
+											<span
+												class="task-priority badge bg-inverse-success">{{task.task_priority}}</span>
+											{% elif task.task_priority == "normal" %}
+											<span
+												class="task-priority badge bg-inverse-warning">{{task.task_priority}}</span>
+											{% elif task.task_priority == "high" %}
+											<span
+												class="task-priority badge bg-inverse-danger">{{task.task_priority}}</span>
+											{%endif%}
+										</span>
+										<span class="task-users">
+											{% for taskuser in taskassigned%}
+											{% if taskuser.task.id == task.id %}
+											<img src="{{taskuser.employee.imageurl}}" class="task-avatar" width="24"
+												height="24" alt="">
+											{%endif%}
+											{%endfor%}
+											<span data-target="#assignee-{{task.id}}" data-toggle="modal"
+												class="action-circle large" title="Assign">
+												<i class="material-icons">person_add</i>
+											</span>
+											<!-- <span class="task-user-count">+2</span> -->
+										</span>
+									</div>
+								</div>
+							</div>
 						</div>
+						<!-- Assignee Modal -->
+						<div id="assignee-{{task.id}}" class="modal custom-modal fade" role="dialog">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title">Assign to this task</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<div class="input-group m-b-30">
+											<input placeholder="Search to add" class="form-control search-input"
+												type="text">
+											<span class="input-group-append">
+												<button class="btn btn-primary">Search</button>
+											</span>
+										</div>
+										<div>
+											<ul class="chat-user-list">
+												{% for employee in employees %}
+
+												<li onclick="assignTask('{{employee.id}}','{{task.id}}')">
+													<a href="#">
+														<div id="assigntask-{{task.id}}{{employee.id}}" class="media">
+															<span class="avatar"><img alt=""
+																	src="{{employee.imageurl}}"></span>
+															<div class="media-body align-self-center text-nowrap">
+																<div class="user-name">
+																	{{employee.username}}</div>
+																<span
+																	class="designation">{{employee.designation}}</span>
+															</div>
+														</div>
+													</a>
+												</li>
+												{% endfor%}
+											</ul>
+										</div>
+										<div class="submit-section">
+											<button class="btn btn-primary  submit-btn" onclick="submitAssign()"
+												data-dismiss="modal">Assign</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /Assignee Modal -->
+
+						<!-- Edit Task Modal -->
+						<div id="edit_task_modal-{{task.id}}" class="modal custom-modal fade" role="dialog">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h4 class="modal-title">Edit Task</h4>
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+									</div>
+									<div class="modal-body">
+										<form method="POST" action="{% url 'edit-task' pk=task.id id=object %}">{% csrf_token %}
+											<div class="form-group">
+												<label>Task Name</label>
+												<input type="text" name="task" class="form-control" value="{{task.task}}">
+											</div>
+											<div class="form-group">
+												<label>Task Priority</label>
+												<select name="priority" class="form-control select">
+													<option selected>{{task.task_priority}}</option>
+
+													<option value="low">Low</option>
+													<option value="normal">Normal</option>
+													<option value="high">High</option>
+												</select>
+											</div>
+											<div class="form-group">
+												<label>Due Date</label>
+												<div >
+													<input class="form-control" type="date"
+													name="due_date"	value="{{task.due_date|date:"Y-m-d" }}">
+												</div>
+											</div>
+											<!-- <div class="form-group">
+						<label>Task Followers</label>
+						<input type="text" class="form-control" placeholder="Search to add">
+						<div class="task-follower-list">
+							<span data-toggle="tooltip" title="John Doe">
+								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-02.jpg"
+									class="avatar" alt="John Doe" width="20" height="20">
+								<i class="fa fa-times"></i>
+							</span>
+							<span data-toggle="tooltip" title="Richard Miles">
+								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"
+									class="avatar" alt="Richard Miles" width="20" height="20">
+								<i class="fa fa-times"></i>
+							</span>
+							<span data-toggle="tooltip" title="John Smith">
+								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-10.jpg"
+									class="avatar" alt="John Smith" width="20" height="20">
+								<i class="fa fa-times"></i>
+							</span>
+							<span data-toggle="tooltip" title="Mike Litorus">
+								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-05.jpg"
+									class="avatar" alt="Mike Litorus" width="20" height="20">
+								<i class="fa fa-times"></i>
+							</span>
+						</div>
+					</div> -->
+											<div class="submit-section text-center">
+												<button class="btn btn-primary submit-btn">Submit</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /Edit Task Modal -->
+
+						{%endif%}
+						{% endfor %}
+
 					</div>
-					<div class="kanban-wrap ks-empty">
-					</div>
-					<div class="add-new-task">
+					<!-- <div class="add-new-task">
 						<a href="javascript:void(0);" data-toggle="modal" data-target="#add_task_modal">Add New Task</a>
-					</div>
+					</div> -->
 				</div>
 
-				<div class="kanban-list kanban-warning">
+				<!-- <div class="kanban-list kanban-warning">
 					<div class="kanban-header">
 						<span class="status-title">Inprogress</span>
 						<div class="dropdown kanban-action">
@@ -508,7 +858,7 @@
 					<div class="add-new-task">
 						<a href="javascript:void(0);" data-toggle="modal" data-target="#add_task_modal">Add New Task</a>
 					</div>
-				</div>
+				</div> -->
 
 			</div>
 		</div>
@@ -660,48 +1010,23 @@
 				</div>
 				<div>
 					<ul class="chat-user-list">
-						<li>
-							<a href="#">
-								<div class="media">
-									<span class="avatar"><img alt=""
-											src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"></span>
-									<div class="media-body align-self-center text-nowrap">
-										<div class="user-name">Richard Miles</div>
-										<span class="designation">Web Developer</span>
-									</div>
+						{% for leader in leaders %}
+						<li onclick="assignEmployee('{{leader.id}}','{{object}}')">
+							<div id="list-{{leader.id}}" class="media">
+								<span class="avatar"><img alt="" src="{{leader.imageurl}}"></span>
+								<div class="media-body align-self-center text-nowrap">
+									<div class="user-name">{{leader}}</div>
+									<span class="designation">{{leader.designation}}</span>
 								</div>
-							</a>
+							</div>
 						</li>
-						<li>
-							<a href="#">
-								<div class="media">
-									<span class="avatar"><img alt=""
-											src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-10.jpg"></span>
-									<div class="media-body align-self-center text-nowrap">
-										<div class="user-name">John Smith</div>
-										<span class="designation">Android Developer</span>
-									</div>
-								</div>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<div class="media">
-									<span class="avatar">
-										<img alt=""
-											src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-16.jpg">
-									</span>
-									<div class="media-body align-self-center text-nowrap">
-										<div class="user-name">Jeffery Lalor</div>
-										<span class="designation">Team Leader</span>
-									</div>
-								</div>
-							</a>
-						</li>
+						{%endfor%}
+
 					</ul>
 				</div>
 				<div class="submit-section">
-					<button class="btn btn-primary submit-btn">Submit</button>
+					<button type="button" onclick="submitLdr()" data-dismiss="modal"
+						class="btn btn-primary submit-btn">Submit</button>
 				</div>
 			</div>
 		</div>
@@ -728,48 +1053,24 @@
 				</div>
 				<div>
 					<ul class="chat-user-list">
-						<li>
-							<a href="#">
-								<div class="media">
-									<span class="avatar"><img alt=""
-											src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"></span>
-									<div class="media-body align-self-center text-nowrap">
-										<div class="user-name">Richard Miles</div>
-										<span class="designation">Web Developer</span>
-									</div>
+						{% for employee in employees %}
+						<li onclick="assignEmployee('{{employee.id}}','{{object}}')">
+
+							<div id="list-{{employee.id}}" class="media">
+								<span class="avatar"><img alt="" src="{{employee.imageurl}}"></span>
+								<div class="media-body align-self-center text-nowrap">
+									<div class="user-name">{{employee}}</div>
+									<span class="designation">{{employee.designation}}</span>
 								</div>
-							</a>
+							</div>
+
 						</li>
-						<li>
-							<a href="#">
-								<div class="media">
-									<span class="avatar"><img alt=""
-											src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-10.jpg"></span>
-									<div class="media-body align-self-center text-nowrap">
-										<div class="user-name">John Smith</div>
-										<span class="designation">Android Developer</span>
-									</div>
-								</div>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<div class="media">
-									<span class="avatar">
-										<img alt=""
-											src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-16.jpg">
-									</span>
-									<div class="media-body align-self-center text-nowrap">
-										<div class="user-name">Jeffery Lalor</div>
-										<span class="designation">Team Leader</span>
-									</div>
-								</div>
-							</a>
-						</li>
+						{%endfor%}
 					</ul>
 				</div>
 				<div class="submit-section">
-					<button class="btn btn-primary submit-btn">Submit</button>
+					<button type="button" onclick="submitEmp()" data-dismiss="modal"
+						class="btn btn-primary submit-btn">Submit</button>
 				</div>
 			</div>
 		</div>
@@ -786,25 +1087,24 @@
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 			</div>
 			<div class="modal-body">
-				<form>
+				<form id="addnewtask" method="POST" action="{% url 'add-new-task' pk=object %}">{% csrf_token %}
 					<div class="form-group">
 						<label>Task Name</label>
-						<input type="text" class="form-control">
+						<input type="text" name="task" class="form-control">
 					</div>
 					<div class="form-group">
 						<label>Task Priority</label>
-						<select class="form-control select">
-							<option>Select</option>
-							<option>High</option>
-							<option>Normal</option>
-							<option>Low</option>
+						<select name="priority" class="form-control select">
+							<option value="low">Low</option>
+							<option value="normal">Normal</option>
+							<option value="high">High</option>
 						</select>
 					</div>
 					<div class="form-group">
 						<label>Due Date</label>
-						<div class="cal-icon"><input class="form-control datetimepicker" type="text"></div>
+						<input class="form-control" name="due_date" type="date">
 					</div>
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label>Task Followers</label>
 						<input type="text" class="form-control" placeholder="Search to add">
 						<div class="task-follower-list">
@@ -813,23 +1113,8 @@
 									class="avatar" alt="John Doe" width="20" height="20">
 								<i class="fa fa-times"></i>
 							</span>
-							<span data-toggle="tooltip" title="Richard Miles">
-								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"
-									class="avatar" alt="Richard Miles" width="20" height="20">
-								<i class="fa fa-times"></i>
-							</span>
-							<span data-toggle="tooltip" title="John Smith">
-								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-10.jpg"
-									class="avatar" alt="John Smith" width="20" height="20">
-								<i class="fa fa-times"></i>
-							</span>
-							<span data-toggle="tooltip" title="Mike Litorus">
-								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-05.jpg"
-									class="avatar" alt="Mike Litorus" width="20" height="20">
-								<i class="fa fa-times"></i>
-							</span>
-						</div>
-					</div>
+							
+					</div> -->
 					<div class="submit-section text-center">
 						<button class="btn btn-primary submit-btn">Submit</button>
 					</div>
@@ -839,71 +1124,5 @@
 	</div>
 </div>
 <!-- /Add Task Modal -->
-
-<!-- Edit Task Modal -->
-<div id="edit_task_modal" class="modal custom-modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title">Edit Task</h4>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<div class="modal-body">
-				<form>
-					<div class="form-group">
-						<label>Task Name</label>
-						<input type="text" class="form-control" value="Website Redesign">
-					</div>
-					<div class="form-group">
-						<label>Task Priority</label>
-						<select class="form-control select">
-							<option>Select</option>
-							<option selected>High</option>
-							<option>Normal</option>
-							<option>Low</option>
-						</select>
-					</div>
-					<div class="form-group">
-						<label>Due Date</label>
-						<div class="cal-icon">
-							<input class="form-control datetimepicker" type="text" value="20/08/2019">
-						</div>
-					</div>
-					<div class="form-group">
-						<label>Task Followers</label>
-						<input type="text" class="form-control" placeholder="Search to add">
-						<div class="task-follower-list">
-							<span data-toggle="tooltip" title="John Doe">
-								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-02.jpg"
-									class="avatar" alt="John Doe" width="20" height="20">
-								<i class="fa fa-times"></i>
-							</span>
-							<span data-toggle="tooltip" title="Richard Miles">
-								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-09.jpg"
-									class="avatar" alt="Richard Miles" width="20" height="20">
-								<i class="fa fa-times"></i>
-							</span>
-							<span data-toggle="tooltip" title="John Smith">
-								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-10.jpg"
-									class="avatar" alt="John Smith" width="20" height="20">
-								<i class="fa fa-times"></i>
-							</span>
-							<span data-toggle="tooltip" title="Mike Litorus">
-								<img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-05.jpg"
-									class="avatar" alt="Mike Litorus" width="20" height="20">
-								<i class="fa fa-times"></i>
-							</span>
-						</div>
-					</div>
-					<div class="submit-section text-center">
-						<button class="btn btn-primary submit-btn">Submit</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- /Edit Task Modal -->
-
 
 {%endblock%}

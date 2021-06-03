@@ -30,6 +30,64 @@ function submitEmp(){
 }
 
 
+// function taskDelete(pk){
+//     var tsk_id = pk
+//     console.log('hiiii')
+
+//     $.ajax({
+//         url: '/tasks-delete/'+tsk_id+'/',
+//         method: "GET",
+//         success:function(response){
+//             if(response=='true'){
+//                 console.log('hiiii2222222') 
+//                 window.location.reload()
+//             // $("#taskcontent").load(location.href + " #taskcontent");
+//         }
+//         }
+//     })
+
+// }
+
+// function addTask(pk){
+//     var obj_id = pk
+//     $.ajax({
+//         url: '/hr/addtask/'+obj_id+'/',
+//         method: 'post',
+//         data: $('#addnewtask').serialize(),
+//         success:function(response){
+//             if(response=='true'){
+//                 console.log('hiiii2222222') 
+//                 window.location.reload()
+                
+//         }
+//     }
+//     })
+// }
+
+function assignTask(pk, id){
+    var emp_id = pk
+    var tsk_id = id
+
+    $.ajax({
+        url: '/projectlead/'+emp_id+ '/' +tsk_id+ '/assign-task/',
+        method: "GET",
+        success:function(response){
+            if(response=='selected'){
+                document.getElementById('assigntask-'+tsk_id+emp_id).style.background ="#4ed04e";
+
+                
+            }
+            if(response=='not selected'){
+                document.getElementById('assigntask-'+tsk_id+emp_id).style.background ="#ff3333";
+            }
+        }
+    })
+
+}
+function submitAssign(){    
+    window.location.reload()
+}
+
 function taskDelete(pk){
     var tsk_id = pk
     console.log('hiiii')
