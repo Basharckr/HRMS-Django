@@ -20,6 +20,7 @@ class Team(models.Model):
 
 class TaskAssigned(models.Model):
     employee = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     task = models.ForeignKey(Tasks, on_delete=models.CASCADE)
     task_status = models.CharField(max_length=100, default='pending')
 

@@ -1,5 +1,5 @@
-{%extends 'hr/base.html' %}
-{% block title %} projects {% endblock %}
+{%extends 'employee/base.html' %}
+{% block title %} projects view{% endblock %}
 {% block content %}
 
 <!-- Page Content -->
@@ -9,7 +9,7 @@
 	<div class="page-header">
 		<div class="row align-items-center">
 			<div class="col">
-				<h3 class="page-title">{{object.project_name}}</h3>
+				<h3 class="page-title">{{project.project_name}}</h3>
 				<ul class="breadcrumb">
 					<li class="breadcrumb-item"><a
 							href="{% url 'login' %}">Dashboard</a></li>
@@ -17,13 +17,8 @@
 				</ul>
 			</div>
 			<div class="col-auto float-right ml-auto">
-				{% if request.user.is_superuser %}
-				<a href="#" class="btn add-btn" data-toggle="modal" data-target="#edit_project"><i
-						class="fa fa-plus"></i> Edit Project</a>
-				<a href="#" class="btn add-btn" data-toggle="modal" data-target="#delete_project"><i
-						class="fa fa-plus"></i> Delete Project</a>
-				{% endif %}
-				<a href="{% url 'task-board' pk=object.id %}"
+			
+				<a href="{% url 'employee-tasks' pk=project.id %}"
 					class="btn btn-white float-right m-r-10" data-toggle="tooltip" title="Task Board"><i
 						class="fa fa-bars"></i></a>
 			</div>
@@ -37,12 +32,12 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="project-title">
-						<h5 class="card-title">{{object.project_name}}</h5>
+						<h5 class="card-title">{{project.project_name}}</h5>
 						<!-- <small class="block text-ellipsis m-b-15"><span class="text-xs">2</span> <span
 								class="text-muted">open tasks, </span><span class="text-xs">5</span> <span
 								class="text-muted">tasks completed</span></small> -->
 					</div>
-					{{object.description}}
+					{{project.description}}
 				</div>
 			</div>
 			<!-- <div class="card">
@@ -109,7 +104,7 @@
 								<div class="task-list-body">
 									<ul id="task-list">
 										{% for task in tasks %}
-										{% if task.status == "pending" %}
+										{% if task.task_status == "pending" %}
 										<li class="task">
 										
 											<div class="task-container">
@@ -121,7 +116,7 @@
 													</a>
 												</span> -->
 												<span id="a-{{task.id}}" class="task-label"
-													contenteditable="true">{{task.task}}</span>
+													contenteditable="true">{{task.task.task}}</span>
 												<!-- <span class="task-action-btn task-btn-right">
 													<span data-target="#assignee-{{task.id}}"
 														data-toggle="modal" class="action-circle large"
@@ -158,7 +153,7 @@
 								<div class="task-list-body">
 									<ul id="task-list">
 										{% for task in tasks %}
-										{% if task.status == "progress" %}<li class="task">
+										{% if task.task_status == "progress" %}<li class="task">
 											<div class="task-container">
 												<!-- <span class="task-action-btn task-check">
 													<span class="action-circle large complete-btn"
@@ -166,7 +161,7 @@
 														<i class="material-icons">check</i>
 													</span>
 												</span> -->
-												<span class="task-label" contenteditable="true">{{task.task}}</span>
+												<span class="task-label" contenteditable="true">{{task.task.task}}</span>
 												<!-- <span class="task-action-btn task-btn-right">
 													<span class="action-circle large" title="Assign">
 														<i class="material-icons">person_add</i>
@@ -199,7 +194,7 @@
 								<div class="task-list-body">
 									<ul id="task-list">
 										{% for task in tasks %}
-										{% if task.status == "completed" %}<li class=" task">
+										{% if task.task_status == "completed" %}<li class=" task">
 											<div class="task-container">
 												<!-- <span class="task-action-btn task-check">
 													<span class="action-circle large complete-btn"
@@ -207,7 +202,7 @@
 														<i class="material-icons">check</i>
 													</span>
 												</span> -->
-												<span class="task-label" contenteditable="true">{{task.task}}</span>
+												<span class="task-label" contenteditable="true">{{task.task.task}}</span>
 												<!-- <span class="task-action-btn task-btn-right">
 													<span class="action-circle large" title="Assign">
 														<i class="material-icons">person_add</i>
@@ -253,11 +248,11 @@
 											</tr> -->
 							<tr>
 								<td>Created:</td>
-								<td class="text-right">{{object.start_date}}</td>
+								<td class="text-right">{{project.start_date}}</td>
 							</tr>
 							<tr>
 								<td>Deadline:</td>
-								<td class="text-right">{{object.end_date}}</td>
+								<td class="text-right">{{project.end_date}}</td>
 							</tr>
 							<!-- <tr>
 												<td>Priority:</td>
@@ -291,12 +286,9 @@
 			</div>
 			<div class="card project-user">
 				<div id="ldr-card" class="card-body">
-					<h6 class="card-title m-b-20">Assigned Leader {% if request.user.is_superuser %}<button
-							type="button" class="float-right btn btn-primary btn-sm" data-toggle="modal"
-							data-target="#assign_leader"><i class="fa fa-plus"></i> Add</button>
-						{% endif %}</h6>
+					<h6 class="card-title m-b-20">Assigned Leader </h6>
 					<ul class="list-box">
-						{% for leader in assigned %}
+						{% for leader in team %}
 						{% if leader.employee.is_staff %}
 						<li>
 							<a href="#">
@@ -323,12 +315,10 @@
 			<div class="card project-user">
 				<div class="card-body">
 					<h6 class="card-title m-b-20">
-						Assigned users{% if request.user.is_staff %}
-						<button type="button" class="float-right btn btn-primary btn-sm" data-toggle="modal"
-							data-target="#assign_user"><i class="fa fa-plus"></i> Add</button>{% endif %}
+						Assigned users
 					</h6>
 					<ul id="emp-card" class="list-box">
-						{% for employee in assigned %}
+						{% for employee in team %}
 						{% if employee.employee.is_staff == False %}
 						<li>
 
@@ -341,7 +331,7 @@
 									<div class="list-body">
 										<span class="message-author">{{employee.employee.username}}</span>
 										<div class="clearfix"></div>
-										<span class="message-content">Web Designer</span>
+										<span class="message-content">{{employee.employee.designation}}</span>
 									</div>
 								</div>
 							</a>

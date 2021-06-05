@@ -181,7 +181,7 @@
 
 					<li class="nav-item dropdown has-arrow main-drop">
 						<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-							<span class="user-img"><img src="https://smarthr.dreamguystech.com/light/assets/img/profiles/avatar-21.jpg" alt="">
+							<span class="user-img"><img src="{{request.user.imageurl}}" alt="">
 							<span class="status online"></span></span>
 							<span>{{request.user}}</span>
 						</a>
@@ -221,7 +221,7 @@
 								<a href="#"><i class="la la-dashboard"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
 								<ul style="display: none;">
 
-									<li><a href="{% url 'hr_dashboard' %}">HR Dashboard</a></li>
+									<li><a href="{% url 'login' %}">HR Dashboard</a></li>
 
 									
 								</ul>

@@ -19,10 +19,13 @@
 		</div>
 	</div>
 	<!-- /Page Header -->
-
 	<div class="row board-view-header">
+
 		<div class="col-4">
+			{% if request.user.is_staff%}
+
 			<div class="pro-teams">
+
 				<div class="pro-team-lead">
 					<h4>Lead</h4>
 					<div id="ldr-card" class="avatar-group">
@@ -59,6 +62,7 @@
 					</div>
 				</div>
 			</div>
+			{%endif%}
 		</div>
 		<div class="col-8 text-right">
 			<!-- <a href="#" class="btn btn-white float-right ml-2" data-toggle="modal" data-target="#add_task_board"><i
@@ -279,9 +283,11 @@
 						{% endfor %}
 
 					</div>
+					{% if request.user.is_staff %}
 					<div class="add-new-task">
 						<a href="javascript:void(0);" data-toggle="modal" data-target="#add_task_modal">Add New Task</a>
 					</div>
+					{%endif%}
 				</div>
 				<div class="kanban-list kanban-info">
 					<div class="kanban-header">

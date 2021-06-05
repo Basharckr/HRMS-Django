@@ -84,6 +84,8 @@ function assignTask(pk, id){
     })
 
 }
+
+
 function submitAssign(){    
     window.location.reload()
 }
@@ -107,48 +109,48 @@ function taskDelete(pk){
 }
 
 // ------------------drag and drop ------------------------------------------------
-const card_item = document.querySelectorAll('.kanban-box');
-const cards = document.querySelectorAll('.kanban-wrap');
-let draggedItem = null;
+// const card_item = document.querySelectorAll('.kanban-box');
+// const cards = document.querySelectorAll('.kanban-wrap');
+// let draggedItem = null;
 
-for (let i = 0; i < card_item.length; i++){
-    const item = card_item[i];
+// for (let i = 0; i < card_item.length; i++){
+//     const item = card_item[i];
     
-    item.addEventListener('dragstart', function (){
-        draggedItem = item;
-        setTimeout(function (){
-            item.style.display = 'none';
-        }, 0)
+//     item.addEventListener('dragstart', function (){
+//         draggedItem = item;
+//         setTimeout(function (){
+//             item.style.display = 'none';
+//         }, 0)
 
-    });
+//     });
 
-    item.addEventListener('dragend', function (){
-        setTimeout(function (){
-            draggedItem.style.display = 'block';
-            draggedItem = null;
-        }, 0);
+//     item.addEventListener('dragend', function (){
+//         setTimeout(function (){
+//             draggedItem.style.display = 'block';
+//             draggedItem = null;
+//         }, 0);
 
-    })
+//     })
 
-    for (let j = 0; j < cards.length; j++){
-        const card = cards[j];
-        card.addEventListener('dragover', function (e){
-            e.preventDefault();
-        });
+//     for (let j = 0; j < cards.length; j++){
+//         const card = cards[j];
+//         card.addEventListener('dragover', function (e){
+//             e.preventDefault();
+//         });
 
-        card.addEventListener('dragenter', function (e){
-            e.preventDefault();
-        });
-        card.addEventListener('dragleave', function (e){
-        });
+//         card.addEventListener('dragenter', function (e){
+//             e.preventDefault();
+//         });
+//         card.addEventListener('dragleave', function (e){
+//         });
 
-        card.addEventListener('drop', function (e){
-            console.log('drop')
-            console.log('droppppp')
-            this.append(draggedItem);
-        });
-    }
-}
+//         card.addEventListener('drop', function (e){
+//             console.log('drop')
+//             console.log('droppppp')
+//             this.append(draggedItem);
+//         });
+//     }
+// }
 
 $( function() {
     $( ".card panel" ).draggable();
