@@ -11,7 +11,7 @@ from employee.models import User
 from projectlead.models import Team
 from django.db.models import Q
 from django.http import HttpResponse
-
+from django.db.models import Case, When
 
 # Create your views here.
 
@@ -104,14 +104,16 @@ def assign_employee(request, pk, id):
 
 def task_board(request, pk):
     project = Project.objects.get(id=pk)
-    project_task = Tasks.objects.filter(project=pk)
+    project_task = Tasks.objects.filter(project=pk).order_by(Case(When(status='pending', then='status')),Case(When(status='progress', then='status')),Case(When(status='completed', then='status')))
+
     team = Team.objects.filter(project=pk)
     employees = User.objects.filter(is_superuser=False)
     taskassigned = TaskAssigned.objects.all()
 
     employee_list = []
     leader_list = []
-
+    status_list = ['pending', 'progress', 'completed']
+    print('kkkkk', status_list)
     for employee in employees:
         if employee.is_staff==True:
             leader_list.append(employee)
@@ -122,7 +124,7 @@ def task_board(request, pk):
 
     context = {
         'project_task': project_task, 'team':team, 'employees':employee_list, 'leaders':leader_list,
-        'object': pk, 'taskassigned': taskassigned, 'project': project}
+        'object': pk, 'taskassigned': taskassigned, 'project': project, 'status': status_list}
     return render(request, 'hr/task-board.html', context)
 
 def add_new_task(request, pk):
@@ -154,3 +156,10 @@ def edit_task(request, pk, id):
         return redirect('task-board', pk=id)
     else:
         return redirect('task-board', pk=id)
+
+def change_task_status(request, pk, st):
+    task = Tasks.objects.get(id=pk)
+    print('statsussss', st)
+    task.status = st
+    task.save()
+    return JsonResponse('true', safe=False)

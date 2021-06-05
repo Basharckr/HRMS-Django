@@ -63,8 +63,8 @@
 		<div class="col-8 text-right">
 			<!-- <a href="#" class="btn btn-white float-right ml-2" data-toggle="modal" data-target="#add_task_board"><i
 					class="fa fa-plus"></i> Create List</a> -->
-			<a href="{% url 'view-project' pk=object %}" class="btn btn-white float-right"
-				title="View Board"><i class="fa fa-link"></i></a>
+			<a href="{% url 'view-project' pk=object %}" class="btn btn-white float-right" title="View Board"><i
+					class="fa fa-link"></i></a>
 		</div>
 
 		<!-- <div class="col-12">
@@ -81,7 +81,7 @@
 	</div>
 
 	<div class="kanban-board card mb-0">
-		<div id="lll" class="card-body">
+		<div class="card-body">
 			<div class="kanban-cont">
 				<div class="kanban-list kanban-danger">
 					<div class="kanban-header">
@@ -97,14 +97,13 @@
 							</div>
 						</div> -->
 					</div>
-					<div class="kanban-wrap">
+					<div id="pending" class="kanban-wrap">
 						{% for task in project_task %}
 						{% if task.status == "pending" %}
-						<div class="card panel">
-							<div class="kanban-box">
+						<div id="{{task.id}}" class="card panel">
+							<div  class="kanban-box">
 								<div class="task-board-header">
-									<span class="status-title"><a
-											href="#">{{task.task}}</a></span>
+									<span class="status-title"><a href="#">{{task.task}}</a></span>
 									<div class="dropdown kanban-task-action">
 										<a href="#" data-toggle="dropdown">
 											<i class="fa fa-angle-down"></i>
@@ -216,10 +215,12 @@
 										<button type="button" class="close" data-dismiss="modal">&times;</button>
 									</div>
 									<div class="modal-body">
-										<form method="POST" action="{% url 'edit-task' pk=task.id id=object %}">{% csrf_token %}
+										<form method="POST" action="{% url 'edit-task' pk=task.id id=object %}">{%csrf_token %}
+											
 											<div class="form-group">
 												<label>Task Name</label>
-												<input type="text" name="task" class="form-control" value="{{task.task}}">
+												<input type="text" name="task" class="form-control"
+													value="{{task.task}}">
 											</div>
 											<div class="form-group">
 												<label>Task Priority</label>
@@ -233,9 +234,9 @@
 											</div>
 											<div class="form-group">
 												<label>Due Date</label>
-												<div >
-													<input class="form-control" type="date"
-													name="due_date"	value="{{task.due_date|date:"Y-m-d" }}">
+												<div>
+													<input class="form-control" type="date" name="due_date"
+														value="{{task.due_date|date:"Y-m-d" }}">
 												</div>
 											</div>
 											<!-- <div class="form-group">
@@ -296,14 +297,13 @@
 							</div>
 						</div> -->
 					</div>
-					<div class="kanban-wrap">
+					<div id="progress"class="kanban-wrap">
 						{% for task in project_task %}
 						{% if task.status == "progress" %}
-						<div class="card panel">
-							<div class="kanban-box">
+						<div id="{{task.id}}"class="card panel">
+							<div  class="kanban-box">
 								<div class="task-board-header">
-									<span class="status-title"><a
-											href="#">{{task.task}}</a></span>
+									<span class="status-title"><a href="#">{{task.task}}</a></span>
 									<div class="dropdown kanban-task-action">
 										<a href="#" data-toggle="dropdown">
 											<i class="fa fa-angle-down"></i>
@@ -415,10 +415,11 @@
 										<button type="button" class="close" data-dismiss="modal">&times;</button>
 									</div>
 									<div class="modal-body">
-										<form method="POST" action="{% url 'edit-task' pk=task.id id=object %}">{% csrf_token %}
+										<form method="POST" action="{% url 'edit-task' pk=task.id id=object %}">{%csrf_token %}
 											<div class="form-group">
 												<label>Task Name</label>
-												<input type="text" name="task" class="form-control" value="{{task.task}}">
+												<input type="text" name="task" class="form-control"
+													value="{{task.task}}">
 											</div>
 											<div class="form-group">
 												<label>Task Priority</label>
@@ -432,9 +433,9 @@
 											</div>
 											<div class="form-group">
 												<label>Due Date</label>
-												<div >
-													<input class="form-control" type="date"
-													name="due_date"	value="{{task.due_date|date:"Y-m-d" }}">
+												<div>
+													<input class="form-control" type="date" name="due_date"
+														value="{{task.due_date|date:"Y-m-d" }}">
 												</div>
 											</div>
 											<!-- <div class="form-group">
@@ -495,14 +496,13 @@
 							</div>
 						</div> -->
 					</div>
-					<div class="kanban-wrap">
+					<div id="completed" class="kanban-wrap">
 						{% for task in project_task %}
 						{% if task.status == "completed" %}
-						<div class="card panel">
-							<div class="kanban-box">
+						<div id="{{task.id}}" class="card panel">
+							<div  class="kanban-box">
 								<div class="task-board-header">
-									<span class="status-title"><a
-											href="#">{{task.task}}</a></span>
+									<span class="status-title"><a href="#">{{task.task}}</a></span>
 									<div class="dropdown kanban-task-action">
 										<a href="#" data-toggle="dropdown">
 											<i class="fa fa-angle-down"></i>
@@ -614,10 +614,12 @@
 										<button type="button" class="close" data-dismiss="modal">&times;</button>
 									</div>
 									<div class="modal-body">
-										<form method="POST" action="{% url 'edit-task' pk=task.id id=object %}">{% csrf_token %}
+										<form method="POST" action="{% url 'edit-task' pk=task.id id=object %}">{%csrf_token %}
+											
 											<div class="form-group">
 												<label>Task Name</label>
-												<input type="text" name="task" class="form-control" value="{{task.task}}">
+												<input type="text" name="task" class="form-control"
+													value="{{task.task}}">
 											</div>
 											<div class="form-group">
 												<label>Task Priority</label>
@@ -631,9 +633,9 @@
 											</div>
 											<div class="form-group">
 												<label>Due Date</label>
-												<div >
-													<input class="form-control" type="date"
-													name="due_date"	value="{{task.due_date|date:"Y-m-d" }}">
+												<div>
+													<input class="form-control" type="date" name="due_date"
+														value="{{task.due_date|date:"Y-m-d" }}">
 												</div>
 											</div>
 											<!-- <div class="form-group">
@@ -1102,7 +1104,7 @@
 					</div>
 					<div class="form-group">
 						<label>Due Date</label>
-						<input class="form-control" name="due_date" type="date">
+						<input class="form-control" required name="due_date" type="date">
 					</div>
 					<!-- <div class="form-group">
 						<label>Task Followers</label>

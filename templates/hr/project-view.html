@@ -12,7 +12,7 @@
 				<h3 class="page-title">{{object.project_name}}</h3>
 				<ul class="breadcrumb">
 					<li class="breadcrumb-item"><a
-							href="https://smarthr.dreamguystech.com/light/index.html">Dashboard</a></li>
+							href="{% url 'login' %}">Dashboard</a></li>
 					<li class="breadcrumb-item active">Project</li>
 				</ul>
 			</div>
@@ -95,33 +95,34 @@
 							</div> -->
 			<div class="project-task">
 				<ul class="nav nav-tabs nav-tabs-top nav-justified mb-0">
-					<li class="nav-item"><a class="nav-link active" href="#all_tasks" data-toggle="tab"
+					<li class="nav-item"><a class="nav-link active" href="#pending_tasks" data-toggle="tab"
 							aria-expanded="true">Pending Task</a></li>
-					<li class="nav-item"><a class="nav-link" href="#pending_tasks" data-toggle="tab"
+					<li class="nav-item"><a class="nav-link" href="#progress_tasks" data-toggle="tab"
 							aria-expanded="false">Progress Tasks</a></li>
 					<li class="nav-item"><a class="nav-link" href="#completed_tasks" data-toggle="tab"
 							aria-expanded="false">Completed Tasks</a></li>
 				</ul>
 				<div id="taskcontent" class="tab-content">
-					<div class="tab-pane show active" id="all_tasks">
+					<div class="tab-pane show active" id="pending_tasks">
 						<div class="task-wrapper">
 							<div class="task-list-container">
 								<div class="task-list-body">
 									<ul id="task-list">
 										{% for task in tasks %}
-										{% if task.task_complete == True %}<li class="completed task">{% else %}
-										<li class="task">{% endif %}
+										{% if task.status == "pending" %}
+										<li class="task">
+										
 											<div class="task-container">
-												<span class="task-action-btn task-check">
+												<!-- <span class="task-action-btn task-check">
 													<a href="{% url 'change-task-status' pk=task.id %}"
 														class="action-circle large complete-btn"
 														title="Mark Complete">
 														<i class="material-icons">check</i>
 													</a>
-												</span>
+												</span> -->
 												<span id="a-{{task.id}}" class="task-label"
 													contenteditable="true">{{task.task}}</span>
-												<span class="task-action-btn task-btn-right">
+												<!-- <span class="task-action-btn task-btn-right">
 													<span data-target="#assignee-{{task.id}}"
 														data-toggle="modal" class="action-circle large"
 														title="Assign">
@@ -132,9 +133,10 @@
 														title="Delete Task">
 														<i class="material-icons">delete</i>
 													</a>
-												</span>
+												</span> -->
 											</div>
 										</li>
+										{% endif %}
 										{% endfor %}
 
 									</ul>
@@ -150,29 +152,29 @@
 							</div>
 						</div>
 					</div>
-					<div class="tab-pane" id="pending_tasks">
+					<div class="tab-pane" id="progress_tasks">
 						<div class="task-wrapper">
 							<div class="task-list-container">
 								<div class="task-list-body">
 									<ul id="task-list">
 										{% for task in tasks %}
-										{% if task.task_complete == False %}<li class="task">
+										{% if task.status == "progress" %}<li class="task">
 											<div class="task-container">
-												<span class="task-action-btn task-check">
+												<!-- <span class="task-action-btn task-check">
 													<span class="action-circle large complete-btn"
 														title="Mark Complete">
 														<i class="material-icons">check</i>
 													</span>
-												</span>
+												</span> -->
 												<span class="task-label" contenteditable="true">{{task.task}}</span>
-												<span class="task-action-btn task-btn-right">
+												<!-- <span class="task-action-btn task-btn-right">
 													<span class="action-circle large" title="Assign">
 														<i class="material-icons">person_add</i>
 													</span>
 													<span class="action-circle large delete-btn" title="Delete Task">
 														<i class="material-icons">delete</i>
 													</span>
-												</span>
+												</span> -->
 											</div>
 										</li>
 										{% endif %}
@@ -197,23 +199,23 @@
 								<div class="task-list-body">
 									<ul id="task-list">
 										{% for task in tasks %}
-										{% if task.task_complete == True %}<li class="completed task">
+										{% if task.status == "completed" %}<li class=" task">
 											<div class="task-container">
-												<span class="task-action-btn task-check">
+												<!-- <span class="task-action-btn task-check">
 													<span class="action-circle large complete-btn"
 														title="Mark Complete">
 														<i class="material-icons">check</i>
 													</span>
-												</span>
+												</span> -->
 												<span class="task-label" contenteditable="true">{{task.task}}</span>
-												<span class="task-action-btn task-btn-right">
+												<!-- <span class="task-action-btn task-btn-right">
 													<span class="action-circle large" title="Assign">
 														<i class="material-icons">person_add</i>
 													</span>
 													<span class="action-circle large delete-btn" title="Delete Task">
 														<i class="material-icons">delete</i>
 													</span>
-												</span>
+												</span> -->
 											</div>
 										</li>
 										{% endif %}
