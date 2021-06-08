@@ -115,7 +115,7 @@
 							{% for leader in team %}
 							{% if leader.project_id == project.id and leader.employee.is_staff == True %}
 							<li>
-								<a href="#" data-toggle="tooltip" title="Jeffery Lalor"><img alt=""
+								<a href="#" data-toggle="tooltip" title="{{leader.employee}}"><img alt=""
 										src="{{leader.employee.imageurl}}"></a>
 							</li>
 							{% endif %}
@@ -128,14 +128,14 @@
 							{% for employee in team %}
 							{% if employee.project_id == project.id and employee.employee.is_staff == False %}
 							<li>
-								<a href="#" data-toggle="tooltip" title="John Doe"><img alt=""
+								<a href="#" data-toggle="tooltip" title="{{employee.employee}}"><img alt=""
 										src="{{employee.employee.imageurl}}"></a>
 							</li>
 							{% endif %}
 							{% endfor%}
 							<li class="dropdown avatar-dropdown">
-								<a href="#" class="all-users dropdown-toggle" data-toggle="dropdown"
-									aria-expanded="false">+15</a>
+								<!-- <a href="#" class="all-users dropdown-toggle" data-toggle="dropdown"
+									aria-expanded="false">+15</a> -->
 								<div class="dropdown-menu dropdown-menu-right">
 									<div class="avatar-group">
 										<a class="avatar avatar-xs" href="#">
@@ -267,8 +267,8 @@
 							{% endif %}
 							{% endfor%}
 							<li class="dropdown avatar-dropdown">
-								<a href="#" class="all-users dropdown-toggle" data-toggle="dropdown"
-									aria-expanded="false">+15</a>
+								<!-- <a href="#" class="all-users dropdown-toggle" data-toggle="dropdown"
+									aria-expanded="false">+15</a> -->
 								<div class="dropdown-menu dropdown-menu-right">
 									<div class="avatar-group">
 										<a class="avatar avatar-xs" href="#">

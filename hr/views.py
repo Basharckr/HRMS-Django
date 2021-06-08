@@ -12,6 +12,7 @@ from projectlead.models import Team
 from django.db.models import Q
 from django.http import HttpResponse
 from django.db.models import Case, When
+from employee.views import SignUpView
 
 # Create your views here.
 
@@ -163,3 +164,15 @@ def change_task_status(request, pk, st):
     task.status = st
     task.save()
     return JsonResponse('true', safe=False)
+
+
+def all_employees(request):
+    all_employees = User.objects.filter(is_superuser=False)
+    context = {
+        'employees': all_employees
+    }
+    return render(request, 'hr/employees.html', context)
+
+
+class EmployeeCreate(SignUpView):
+    template_name = 'hr/employees.html'

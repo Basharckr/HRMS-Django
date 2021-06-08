@@ -125,5 +125,4 @@ def emp_change_task_status(request, pk, st):
     task = TaskAssigned.objects.get(id=pk)
     task.task_status = st
     task.save()
-    print('readyyyyyyyyyyyyyyyyyyyy')
     return JsonResponse('true', safe=False)
