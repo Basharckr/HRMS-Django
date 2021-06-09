@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView, redirect_to_login
-
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
 from hr.models import *
@@ -120,7 +119,6 @@ def task_board(request, pk):
     employee_list = []
     leader_list = []
     status_list = ['pending', 'progress', 'completed']
-    print('kkkkk', status_list)
     for employee in employees:
         if employee.is_staff==True:
             leader_list.append(employee)
@@ -141,7 +139,6 @@ def add_new_task(request, pk):
         priority = request.POST['priority']
         due_date = request.POST['due_date']
         Tasks.objects.create(task=task, task_priority=priority, due_date=due_date, project=project)
-        print('createdddddddddddddddddddd')
         return redirect('task-board', pk=pk)
     else:
         return redirect('task-board')
@@ -159,14 +156,12 @@ def edit_task(request, pk, id):
         task.task_priority = request.POST['priority']
         task.due_date = request.POST['due_date']
         task.save()
-        print('updatedddddd')
         return redirect('task-board', pk=id)
     else:
         return redirect('task-board', pk=id)
 
 def change_task_status(request, pk, st):
     task = Tasks.objects.get(id=pk)
-    print('statsussss', st)
     task.status = st
     task.save()
     return JsonResponse('true', safe=False)

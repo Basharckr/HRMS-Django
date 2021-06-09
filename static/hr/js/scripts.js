@@ -1,7 +1,6 @@
 function assignEmployee(pk, id){
     var emp_id = pk
     var pjt_id = id
-    console.log('hiiii')
 
     $.ajax({
         url: '/hr/'+emp_id+ '/' +pjt_id+ '/assign/',
@@ -69,7 +68,6 @@ function assignTask(pk, id, pr){
     var tsk_id = id
     var pr_id = pr
 
-    console.log(pr_id)
     $.ajax({
         url: '/projectlead/'+emp_id+ '/' +tsk_id+ '/assign-task/'+pr_id+'/',
         method: "GET",
@@ -94,14 +92,12 @@ function submitAssign(){
 
 function taskDelete(pk){
     var tsk_id = pk
-    console.log('hiiii')
 
     $.ajax({
         url: '/tasks-delete/'+tsk_id+'/',
         method: "GET",
         success:function(response){
             if(response=='true'){
-                console.log('hiiii2222222') 
                 window.location.reload()
             // $("#taskcontent").load(location.href + " #taskcontent");
         }
@@ -167,16 +163,9 @@ $( function() {
                method: 'get',
                success: function(response){
                    if(response=='true'){
-                    console.log('change')
-
                    }
                }
             })
-            console.log('droped')
-            console.log('iddd'+id)
-            console.log('box'+status)
-
-
 
         }
         } );

@@ -14,14 +14,11 @@ $( function() {
                method: 'get',
                success: function(response){
                    if(response=='true'){
-                    console.log('change')
 
                    }
                }
             })
-            console.log('droped')
-            console.log('iddd'+id)
-            console.log('box'+status)
+         
 
 
 
