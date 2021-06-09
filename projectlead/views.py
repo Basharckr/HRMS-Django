@@ -45,10 +45,6 @@ def task_view(request, pk):
     }
     return render(request, 'projectlead/tasks.html', context)
 
-    # return JsonResponse(serializers.serialize('json', tasks), safe=False)
-
-
-
 
 def task_delete(request, pk):
    task = Tasks.objects.get(id=pk)

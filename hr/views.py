@@ -17,10 +17,6 @@ from employee.views import SignUpView
 
 
 
-
-
-
-
 # HR index
 class HrDashboard(TemplateView):  
     def get_context_data(self, **kwargs):
@@ -31,8 +27,7 @@ class HrDashboard(TemplateView):
         return context 
     template_name = 'hr/hr_dashboard.html'
 
-    
-
+   
 class ProjectCreate(CreateView):
     model = Project
     fields = '__all__'
@@ -64,8 +59,6 @@ class ProjectDetailView(DetailView):
         context['assigned'] = Team.objects.filter(project=self.kwargs.get('pk'))
         context['tasks'] = Tasks.objects.filter(project=self.kwargs.get('pk'))
 
-
-
         employee_list = []
         leader_list = []
 
@@ -87,11 +80,11 @@ class ProjectUpdate(UpdateView):
     success_url = reverse_lazy('projects')
 
 
-
 def project_delete(request, pk):
     project = Project.objects.get(id=pk)
     project.delete()
     return redirect('projects')
+
 
 def assign_employee(request, pk, id):
     employee = User.objects.get(id=pk)
@@ -104,9 +97,7 @@ def assign_employee(request, pk, id):
     else:
         Team.objects.create(employee=employee, project=project)
         return JsonResponse('selected', safe=False)
-       
-
-    
+           
 
 def task_board(request, pk):
     project = Project.objects.get(id=pk)
@@ -124,13 +115,12 @@ def task_board(request, pk):
             leader_list.append(employee)
         else:
             employee_list.append(employee)
-            
-
 
     context = {
         'project_task': project_task, 'team':team, 'employees':employee_list, 'leaders':leader_list,
         'object': pk, 'taskassigned': taskassigned, 'project': project, 'status': status_list}
     return render(request, 'hr/task-board.html', context)
+
 
 def add_new_task(request, pk):
     project = Project.objects.get(id=pk)
@@ -142,6 +132,7 @@ def add_new_task(request, pk):
         return redirect('task-board', pk=pk)
     else:
         return redirect('task-board')
+
 
 def task_delete(request, pk, id):
    task = Tasks.objects.get(id=pk)
@@ -159,6 +150,7 @@ def edit_task(request, pk, id):
         return redirect('task-board', pk=id)
     else:
         return redirect('task-board', pk=id)
+
 
 def change_task_status(request, pk, st):
     task = Tasks.objects.get(id=pk)
