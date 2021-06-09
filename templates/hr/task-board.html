@@ -183,7 +183,7 @@
 											<ul class="chat-user-list">
 												{% for employee in employees %}
 
-												<li onclick="assignTask('{{employee.id}}','{{task.id}}')">
+												<li onclick="assignTask('{{employee.id}}','{{task.id}}','{{project.id}}')">
 													<a href="#">
 														<div id="assigntask-{{task.id}}{{employee.id}}" class="media">
 															<span class="avatar"><img alt=""
@@ -385,7 +385,7 @@
 											<ul class="chat-user-list">
 												{% for employee in employees %}
 
-												<li onclick="assignTask('{{employee.id}}','{{task.id}}')">
+												<li onclick="assignTask('{{employee.id}}','{{task.id}}','{{project.id}}')">
 													<a href="#">
 														<div id="assigntask-{{task.id}}{{employee.id}}" class="media">
 															<span class="avatar"><img alt=""
@@ -584,7 +584,7 @@
 											<ul class="chat-user-list">
 												{% for employee in employees %}
 
-												<li onclick="assignTask('{{employee.id}}','{{task.id}}')">
+												<li onclick="assignTask('{{employee.id}}','{{task.id}}','{{project.id}}')">
 													<a href="#">
 														<div id="assigntask-{{task.id}}{{employee.id}}" class="media">
 															<span class="avatar"><img alt=""

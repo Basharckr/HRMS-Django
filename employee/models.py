@@ -6,8 +6,8 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
 
     number = models.CharField(max_length=15, blank=True, null=True)
-    designation = models.CharField(max_length=100, blank=True, null=True)
-    image = models.ImageField(blank=True, null=True, upload_to='images')
+    designation = models.CharField(max_length=100, blank=True, null=True, default='developer')
+    image = models.ImageField(blank=True, null=True, upload_to='images', default='images/images.profile.png')
 
     @property
     def imageurl(self):

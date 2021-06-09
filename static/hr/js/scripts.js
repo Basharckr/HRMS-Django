@@ -64,12 +64,14 @@ function submitEmp(){
 //     })
 // }
 
-function assignTask(pk, id){
+function assignTask(pk, id, pr){
     var emp_id = pk
     var tsk_id = id
+    var pr_id = pr
 
+    console.log(pr_id)
     $.ajax({
-        url: '/projectlead/'+emp_id+ '/' +tsk_id+ '/assign-task/',
+        url: '/projectlead/'+emp_id+ '/' +tsk_id+ '/assign-task/'+pr_id+'/',
         method: "GET",
         success:function(response){
             if(response=='selected'){

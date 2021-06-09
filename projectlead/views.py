@@ -67,14 +67,15 @@ def change_task_status(request, pk):
     return redirect('tasks')
 
 
-def assign_task(request, pk, id):
+def assign_task(request, pk, id, uk):
     employee = User.objects.get(id=pk)
     task_id = Tasks.objects.get(id=id)
+    project_id = Project.objects.get(id=uk)
 
-    if  TaskAssigned.objects.filter(employee=employee, task=task_id):
-        obj = TaskAssigned.objects.get(employee=employee, task=task_id)
+    if  TaskAssigned.objects.filter(employee=employee, task=task_id, project=project_id):
+        obj = TaskAssigned.objects.get(employee=employee, task=task_id, project=project_id)
         obj.delete()
         return JsonResponse('not selected', safe=False)
     else:
-        TaskAssigned.objects.create(employee=employee, task=task_id)
+        TaskAssigned.objects.create(employee=employee, task=task_id, project=project_id)
         return JsonResponse('selected', safe=False)
