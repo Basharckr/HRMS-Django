@@ -12,6 +12,12 @@ from django.core import serializers
 
 # project leader index view
 class LeaderDashboard(TemplateView):
+    def get_context_data(self, **kwargs):
+        context = super(LeaderDashboard, self).get_context_data(**kwargs)
+        context['project_count'] = Team.objects.filter(employee=self.request.user).count()
+        context['task_count'] = Tasks.objects.count()
+        context['employee_count'] = User.objects.count()
+        return context 
     template_name = 'projectlead/ldr_dashboard.html'
 
 

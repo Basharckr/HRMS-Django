@@ -1,7 +1,11 @@
 {%extends 'hr/base.html' %}
 {% block title %} projects {% endblock %}
 {% block content %}
-
+<style>
+	.cal-icon:after {
+		display: none;
+	}
+</style>
 <!-- Page Content -->
 <div class="content container-fluid">
 
@@ -487,7 +491,7 @@
 							<div class="form-group">
 								<label>End Date</label>
 								<div class="cal-icon">
-									<input class="form-control datetimepicker" name="end_date"
+									<input class="form-control " name="end_date"
 										value="{{project.end_date|date:'Y-m-d'}}" type="date">
 								</div>
 							</div>
