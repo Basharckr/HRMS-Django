@@ -6,6 +6,9 @@ from hr.models import *
 from .models import *
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
+from hr.views import ProjectDetailView
+from django.db.models import Case, When
+
 # Create your views here.
 
 
@@ -19,11 +22,6 @@ class LeaderDashboard(TemplateView):
         context['employee_count'] = User.objects.count()
         return context 
     template_name = 'projectlead/ldr_dashboard.html'
-
-
-class ProjectDetail(DetailView):
-    model = Project
-    template_name='projectlead/project-view.html'
 
 
 class TaskCreate(CreateView): 
@@ -81,3 +79,40 @@ def assign_task(request, pk, id, uk):
     else:
         TaskAssigned.objects.create(employee=employee, task=task_id, project=project_id)
         return JsonResponse('selected', safe=False)
+
+
+def leader_projects(request):
+    project = Team.objects.filter(employee=request.user)
+    team = Team.objects.all()
+    context = {
+        'project': project, 'team': team
+    }
+    return render(request, 'projectlead/ldr-projects.html', context)
+
+
+class LeaderProjectDetail(ProjectDetailView):
+    template_name='projectlead/ldr-project-view.html'
+
+
+
+def ldr_task_board(request, pk):
+    project = Project.objects.get(id=pk)
+    project_task = Tasks.objects.filter(project=pk).order_by(Case(When(status='pending', then='status')),Case(When(status='progress', then='status')),Case(When(status='completed', then='status')))
+
+    team = Team.objects.filter(project=pk)
+    employees = User.objects.filter(is_superuser=False)
+    taskassigned = TaskAssigned.objects.all()
+
+    employee_list = []
+    leader_list = []
+    status_list = ['pending', 'progress', 'completed']
+    for employee in employees:
+        if employee.is_staff==True:
+            leader_list.append(employee)
+        else:
+            employee_list.append(employee)
+
+    context = {
+        'project_task': project_task, 'team':team, 'employees':employee_list, 'leaders':leader_list,
+        'object': pk, 'taskassigned': taskassigned, 'project': project, 'status': status_list}
+    return render(request, 'projectlead/ldr-task-board.html', context)

@@ -16,7 +16,7 @@ urlpatterns = [
     path('edit-task/<int:pk>/<int:id>/', edit_task, name='edit-task'),
     path('change-task-status/<int:pk><str:st>/', change_task_status, name='change-task-status'),
     path('all-employees/', all_employees, name='all-employees'),
-
+    path('<int:pk>/emp-profile', employee_profile, name='emp-profile')
 
 
 

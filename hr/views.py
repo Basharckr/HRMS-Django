@@ -16,7 +16,6 @@ from employee.views import SignUpView
 # Create your views here.
 
 
-
 # HR index
 class HrDashboard(TemplateView):  
     def get_context_data(self, **kwargs):
@@ -169,3 +168,10 @@ def all_employees(request):
 
 class EmployeeCreate(SignUpView):
     template_name = 'hr/employees.html'
+
+def employee_profile(request, pk):
+    employee = User.objects.get(id=pk)
+    context = {
+        'employee': employee
+    }
+    return render(request, 'hr/employee-profile.html', context)

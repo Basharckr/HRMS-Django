@@ -1,4 +1,4 @@
-{%extends 'hr/base.html' %}
+{%extends 'projectlead/base.html' %}
 {% block title %} Task-board {% endblock %}
 {% block content %}
 
@@ -71,7 +71,7 @@
 		<div class="col-8 text-right">
 			<!-- <a href="#" class="btn btn-white float-right ml-2" data-toggle="modal" data-target="#add_task_board"><i
 					class="fa fa-plus"></i> Create List</a> -->
-			<a href="{% url 'view-project' pk=object %}" class="btn btn-white float-right" title="View Board"><i
+			<a href="{% url 'ldr-view-project' pk=object %}" class="btn btn-white float-right" title="View Board"><i
 					class="fa fa-link"></i></a>
 		</div>
 

@@ -51,7 +51,12 @@ def emp_profile(request):
     context = {
         'project': project, 'team': team
     }
-    return render(request, 'account/profile.html', context)
+    if request.user.is_superuser:
+        return render(request, 'hr/profile.html', context)
+    elif request.user.is_staff:
+        return render(request, 'projectlead/profile.html', context)
+    else:
+        return render(request, 'account/profile.html', context)
 
 
 def profile_update(request):
@@ -114,7 +119,7 @@ def employee_task_board(request, pk):
     }
     return render(request, 'employee/employee-task.html', context)
 
-
+    
 def emp_change_task_status(request, pk, st):
     task = TaskAssigned.objects.get(id=pk)
     task.task_status = st
