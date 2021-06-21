@@ -79,8 +79,8 @@ def change_task_status(request, pk):
     return redirect('tasks')
 
 
+
 @login_required
-@user_is_staff
 def assign_task(request, pk, id, uk):
     employee = User.objects.get(id=pk)
     task_id = Tasks.objects.get(id=id)
