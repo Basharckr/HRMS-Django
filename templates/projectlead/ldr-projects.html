@@ -1,9 +1,13 @@
 {%extends 'projectlead/base.html' %}
-{% block title %} HR-project {% endblock %}
+{% block title %} leader-project {% endblock %}
 {% block content %}
 
 <style>
 	.cal-icon:after {
+		display: none;
+	
+	}
+	.popover .arrow{
 		display: none;
 	}
 </style>
@@ -100,7 +104,7 @@
 							{% for leader in team %}
 							{% if leader.project_id == project.project.id and leader.employee.is_staff == True %}
 							<li>
-								<span>{{leader.employee}}</span>
+								<!-- <span>{{leader.employee}}</span> -->
 								<a href="#" data-toggle="tooltip" title="{{leader.employee.username}}"><img alt=""
 										src="{{leader.employee.imageurl}}"></a>
 							</li>
@@ -114,7 +118,7 @@
 							{% for employee in team %}
 							{% if employee.project_id == project.project.id and employee.employee.is_staff == False %}
 							<li>
-								<span>{{employee.employee}}</span>
+								<!-- <span>{{employee.employee}}</span> -->
 								<a href="#" data-toggle="tooltip" title="{{employee.employee.username}}"><img alt=""
 										src="{{employee.employee.imageurl}}"></a>
 							</li>

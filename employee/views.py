@@ -7,6 +7,8 @@ from hr.models import *
 from projectlead.models import *
 from django.contrib import messages
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
@@ -33,13 +35,17 @@ class CustomLoginView(LoginView):
 
 
 #user logout
+@method_decorator(login_required, name='dispatch')
 class CustomLogoutView(LogoutView):
     next_page = 'login'
 
+
+@method_decorator(login_required, name='dispatch')
 class EmployeeDashboard(TemplateView):
     template_name = 'employee/emp_dashboard.html'
   
 
+@login_required
 def emp_profile(request):
 
     team = Team.objects.all()
@@ -59,6 +65,7 @@ def emp_profile(request):
         return render(request, 'account/profile.html', context)
 
 
+@login_required
 def profile_update(request):
 
     if request.method == 'POST':
@@ -91,6 +98,7 @@ def profile_update(request):
 
 
 
+@login_required
 def employee_project(request):
     team = Team.objects.all()  
     context = {
@@ -99,6 +107,7 @@ def employee_project(request):
     return render(request, 'employee/employee-projects.html', context)
 
 
+@login_required
 def employee_project_veiw(request, pk):
     project = Project.objects.get(id=pk)
     team = Team.objects.filter(project=project)
@@ -109,6 +118,7 @@ def employee_project_veiw(request, pk):
     return render(request, 'employee/emp-project-view.html', context)
 
 
+@login_required
 def employee_task_board(request, pk):
 
     project_task = TaskAssigned.objects.filter(project=pk)
@@ -119,7 +129,8 @@ def employee_task_board(request, pk):
     }
     return render(request, 'employee/employee-task.html', context)
 
-    
+
+@login_required
 def emp_change_task_status(request, pk, st):
     task = TaskAssigned.objects.get(id=pk)
     task.task_status = st

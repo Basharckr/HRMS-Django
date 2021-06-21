@@ -8,12 +8,18 @@ from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from hr.views import ProjectDetailView
 from django.db.models import Case, When
+from hrms.decorators import user_is_staff
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
 
 
 # project leader index view
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_is_staff, name='dispatch')
 class LeaderDashboard(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(LeaderDashboard, self).get_context_data(**kwargs)
@@ -24,38 +30,44 @@ class LeaderDashboard(TemplateView):
     template_name = 'projectlead/ldr_dashboard.html'
 
 
-class TaskCreate(CreateView): 
-    model = Tasks
-    fields = ['task', 'project',]
-    success_url = reverse_lazy('tasks')
-    template_name = 'projectlead/tasks.html'
-
-    def get(self, request):
-        tasks = Tasks.objects.filter(project=Project.objects.aggregate(Max('id')).get('id__max'))
-        projects = Project.objects.all().order_by('-id')
-        employee = User.objects.filter(is_superuser=False).exclude(id=request.user.id)
-        context = {
-            'tasks': tasks, 'projects': projects, 'employee': employee
-        }
-        return render(request, 'projectlead/tasks.html', context)
+@login_required
+def add_new_task(request, pk):
+    project = Project.objects.get(id=pk)
+    if request.method == 'POST':
+        task = request.POST['task']
+        priority = request.POST['priority']
+        due_date = request.POST['due_date']
+        Tasks.objects.create(task=task, task_priority=priority, due_date=due_date, project=project)
+        return redirect('ldr-task-board', pk=pk)
+    else:
+        return redirect('ldr-task-board')
 
 
-def task_view(request, pk):
-    tasks = Tasks.objects.filter(project=pk)
-    projects = Project.objects.all().order_by('-id')
-    employee = User.objects.filter(is_superuser=False).exclude(id=request.user.id)
-    context = {
-        'tasks': tasks, 'projects': projects, 'employee': employee
-    }
-    return render(request, 'projectlead/tasks.html', context)
-
-
-def task_delete(request, pk):
+@login_required
+def task_delete(request, pk, id):
    task = Tasks.objects.get(id=pk)
    task.delete()
-   return JsonResponse('true', safe=False)
+   return redirect('ldr-task-board', pk=id)
 
 
+@login_required
+def edit_task(request, pk, id):
+    task = Tasks.objects.get(id=pk)
+    if request.method == 'POST':
+        task.task = request.POST['task']
+        task.task_priority = request.POST['priority']
+        task.due_date = request.POST['due_date']
+        task.save()
+        return redirect('ldr-task-board', pk=id)
+    else:
+        return redirect('ldr-task-board', pk=id)
+
+
+
+
+
+@login_required
+@user_is_staff
 def change_task_status(request, pk):
     task = Tasks.objects.get(id=pk)
     if task.task_complete == False:
@@ -67,6 +79,8 @@ def change_task_status(request, pk):
     return redirect('tasks')
 
 
+@login_required
+@user_is_staff
 def assign_task(request, pk, id, uk):
     employee = User.objects.get(id=pk)
     task_id = Tasks.objects.get(id=id)
@@ -81,6 +95,8 @@ def assign_task(request, pk, id, uk):
         return JsonResponse('selected', safe=False)
 
 
+@login_required
+@user_is_staff
 def leader_projects(request):
     project = Team.objects.filter(employee=request.user)
     team = Team.objects.all()
@@ -90,11 +106,15 @@ def leader_projects(request):
     return render(request, 'projectlead/ldr-projects.html', context)
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_is_staff, name='dispatch')
 class LeaderProjectDetail(ProjectDetailView):
     template_name='projectlead/ldr-project-view.html'
 
 
 
+@login_required
+@user_is_staff
 def ldr_task_board(request, pk):
     project = Project.objects.get(id=pk)
     project_task = Tasks.objects.filter(project=pk).order_by(Case(When(status='pending', then='status')),Case(When(status='progress', then='status')),Case(When(status='completed', then='status')))

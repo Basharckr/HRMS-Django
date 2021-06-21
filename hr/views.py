@@ -12,12 +12,18 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.db.models import Case, When
 from employee.views import SignUpView
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
+from hrms.decorators import user_is_superuser
 
 # Create your views here.
 
 
 # HR index
-class HrDashboard(TemplateView):  
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_is_superuser, name='dispatch')
+class HrDashboard(TemplateView): 
     def get_context_data(self, **kwargs):
         context = super(HrDashboard, self).get_context_data(**kwargs)
         context['project_count'] = Project.objects.count()
@@ -25,8 +31,10 @@ class HrDashboard(TemplateView):
         context['employee_count'] = User.objects.count()
         return context 
     template_name = 'hr/hr_dashboard.html'
+    
 
-   
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_is_superuser, name='dispatch')
 class ProjectCreate(CreateView):
     model = Project
     fields = '__all__'
@@ -46,6 +54,8 @@ class ProjectCreate(CreateView):
         return context
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(staff_member_required, name='dispatch')
 class ProjectDetailView(DetailView):
     model = Project
     fields = '__all__'
@@ -72,6 +82,8 @@ class ProjectDetailView(DetailView):
         return context
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_is_superuser, name='dispatch')
 class ProjectUpdate(UpdateView):
     model = Project
     fields = '__all__'
@@ -79,12 +91,16 @@ class ProjectUpdate(UpdateView):
     success_url = reverse_lazy('projects')
 
 
+@login_required
+@user_is_superuser
 def project_delete(request, pk):
     project = Project.objects.get(id=pk)
     project.delete()
     return redirect('projects')
 
 
+@login_required
+@staff_member_required
 def assign_employee(request, pk, id):
     employee = User.objects.get(id=pk)
     project = Project.objects.get(id=id)
@@ -96,8 +112,10 @@ def assign_employee(request, pk, id):
     else:
         Team.objects.create(employee=employee, project=project)
         return JsonResponse('selected', safe=False)
-           
 
+
+@login_required
+@user_is_superuser
 def task_board(request, pk):
     project = Project.objects.get(id=pk)
     project_task = Tasks.objects.filter(project=pk).order_by(Case(When(status='pending', then='status')),Case(When(status='progress', then='status')),Case(When(status='completed', then='status')))
@@ -121,6 +139,7 @@ def task_board(request, pk):
     return render(request, 'hr/task-board.html', context)
 
 
+@login_required
 def add_new_task(request, pk):
     project = Project.objects.get(id=pk)
     if request.method == 'POST':
@@ -133,12 +152,14 @@ def add_new_task(request, pk):
         return redirect('task-board')
 
 
+@login_required
 def task_delete(request, pk, id):
    task = Tasks.objects.get(id=pk)
    task.delete()
    return redirect('task-board', pk=id)
 
 
+@login_required
 def edit_task(request, pk, id):
     task = Tasks.objects.get(id=pk)
     if request.method == 'POST':
@@ -151,6 +172,7 @@ def edit_task(request, pk, id):
         return redirect('task-board', pk=id)
 
 
+@login_required
 def change_task_status(request, pk, st):
     task = Tasks.objects.get(id=pk)
     task.status = st
@@ -158,6 +180,8 @@ def change_task_status(request, pk, st):
     return JsonResponse('true', safe=False)
 
 
+@login_required
+@user_is_superuser
 def all_employees(request):
     all_employees = User.objects.filter(is_superuser=False)
     context = {
@@ -166,9 +190,14 @@ def all_employees(request):
     return render(request, 'hr/employees.html', context)
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_is_superuser, name='dispatch')
 class EmployeeCreate(SignUpView):
     template_name = 'hr/employees.html'
 
+
+@login_required
+@user_is_superuser
 def employee_profile(request, pk):
     employee = User.objects.get(id=pk)
     context = {
